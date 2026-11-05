@@ -3,24 +3,26 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand: #6d28d9;
+  --brand-soft: #f5f3ff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Geist（Vercel 官方 npm 包，本地文件，构建离线可用），回退系统栈 */
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+/* 锚点滚动偏移，避免固定导航遮住标题 */
+html {
+  scroll-behavior: smooth;
 }
