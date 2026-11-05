@@ -13,6 +13,15 @@ export const metadata: Metadata = {
   },
   description:
     "Clone your voice from 30 seconds of audio and dub it into 75+ languages. Free to try, no sign-up, commercial license included.",
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    url: SITE.url,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
