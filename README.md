@@ -37,22 +37,22 @@ npm run dev                  # http://localhost:3000
 
 ## 上线步骤（必须你本人操作的清单）
 
-> **当前状态（2026-11-05）**：GitHub `xigege1/projects-voiclu` 已推送；Vercel 项目 `voiclu`（team xigege2）已部署且已接 GitHub 自动部署；`voiclu.vercel.app` 全部路由 200；`voiclu.com` 与 `www.voiclu.com` 已添加到项目，**只差 Cloudflare DNS 两条记录**。环境变量仅配了 `NEXT_PUBLIC_SITE_URL` / `NEXT_PUBLIC_SUPPORT_EMAIL`，其余待填（填完需 redeploy 才生效）。
+> **当前状态（2026-11-05）**：GitHub `xigege1/projects-voiclu` 已推送；Vercel 项目 `voiclu`（team xigege2）已部署且已接 GitHub 自动部署；**`https://voiclu.com` 已上线**，13 个路由全部 200，Let's Encrypt 证书已签发（有效期至 2027-02-03），`www.voiclu.com` 308 跳转到主域。**剩下只有环境变量没填**（当前仅 `NEXT_PUBLIC_SITE_URL` / `NEXT_PUBLIC_SUPPORT_EMAIL`），所以页面能看、API 会 500。
 
-**Cloudflare DNS 要加的两条（Proxy 必须是 DNS only / 灰云）：**
+**Cloudflare DNS 已配好（Proxy = DNS only / 灰云）：**
 
 | Type | Name | Content |
 |---|---|---|
-| CNAME | `@` | `2833759d9d5b7e9e.vercel-dns-017.com` |
+| A | `@` | `216.198.79.65`、`64.29.17.65`（Vercel anycast） |
 | CNAME | `www` | `2833759d9d5b7e9e.vercel-dns-017.com` |
 
-加完跑 `npx vercel domains verify voiclu.com` 确认，证书自动签发。
+> 踩坑记录：域名刚挂上时 apex 用 CNAME 会与 Cloudflare 的 CNAME flattening 冲突，用 Vercel 面板给的 A 记录更稳。若出现「HTTP 能开、HTTPS 握手失败、证书列表里没有该域名」，说明证书没触发签发 —— 把域名从项目里摘掉再重新添加即可（本次即用此法修复）。
 
 1. **GitHub 私有仓库**：`git remote add origin … && git push -u origin main` ✅ 已完成（remote 用 SSH）
-2. **Vercel**：✅ 已部署 `https://voiclu.app` / `voiclu.vercel.app`；后续 `git push` 自动触发部署
-3. **Cloudflare DNS**：⬜ 加上面两条 CNAME（先 DNS only，证书正常后再视情况开代理）
-4. **GSC**：加"网域资源" `voiclu.com`，Cloudflare 加 TXT 验证 → Sitemaps 提交 `sitemap.xml` → 网址检查首页 → 请求编入索引
-5. **Umami/GA4**：拿 `NEXT_PUBLIC_UMAMI_*` 填入（或把 GA4 脚本加进 `layout.tsx`）
+2. **Vercel**：✅ 已部署 `https://voiclu.vercel.app`；后续 `git push` 自动触发部署
+3. **Cloudflare DNS**：✅ 已完成，证书自动签发，`https://voiclu.com` 可访问
+4. **GSC**：加"网域资源" `voiclu.com`，Cloudflare 加 TXT 验证 → Sitemaps 提交 `sitemap.xml` → 网址检查首页 → 请求编入索引 ⬅️ **下一步就做这个**
+5. **环境变量**：把 `.env.example` 复制成 `.env.local` 填好值，然后 `bash scripts/push-env.sh` 批量推到 Vercel → `npx vercel deploy --prod --yes` 重新部署
 6. **demo 音频**：用真实账号克隆自己的声音，跑 6 条合成（原声×2、克隆英文×2、克隆葡语×2），文件按此命名放进 `public/demo/`：
    `original-1.mp3` `clone-en-1.mp3` `clone-pt-1.mp3` `original-2.mp3` `clone-en-2.mp3` `clone-pt-2.mp3`
 7. **Creem**：注册 → 建 4 个产品（Starter $9.9/月、Creator $29/月、One-time $49、年付）→ checkout 链接替换 `PricingSection.tsx` 里的 TODO → webhook 指向 `https://voiclu.com/api/webhooks/creem` → 签名密钥填 `CREEM_WEBHOOK_SECRET` → **用测试卡真买一单**，确认额度到账
