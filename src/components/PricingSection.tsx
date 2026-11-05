@@ -3,8 +3,8 @@ import { PLANS, ANNUAL_NOTE } from "@/lib/constants";
 
 export default function PricingSection({ compact = false }: { compact?: boolean }) {
   return (
-    <section id="pricing" className={compact ? "" : "py-16"}>
-      <div className="mx-auto max-w-6xl px-4">
+    <section id="pricing" className={compact ? "" : "section-pad"}>
+      <div className="container-gutter mx-auto max-w-6xl">
         <h2 className="text-center text-3xl font-bold tracking-tight">Simple pricing</h2>
         <p className="mt-2 text-center text-gray-500">
           Pay per character, never per minute of silence. 1,000 characters ≈ 1 minute of audio.
@@ -15,7 +15,7 @@ export default function PricingSection({ compact = false }: { compact?: boolean 
           {PLANS.map((p) => (
             <div
               key={p.id}
-              className={`relative rounded-2xl border p-6 ${
+              className={`relative rounded-xl border p-6 sm:p-8 ${
                 p.highlight
                   ? "border-[var(--brand)] shadow-lg ring-1 ring-[var(--brand)]"
                   : "border-gray-200"
@@ -42,10 +42,8 @@ export default function PricingSection({ compact = false }: { compact?: boolean 
               {/* TODO(checkout): 接入 Creem 后把 href 换成对应 checkout 链接（metadata 带 user_id + plan） */}
               <a
                 href="/pricing"
-                className={`mt-6 block rounded-lg py-2.5 text-center text-sm font-semibold ${
-                  p.highlight
-                    ? "bg-[var(--brand)] text-white hover:bg-[#5b21b6]"
-                    : "border border-gray-200 text-gray-800 hover:border-[var(--brand)]"
+                className={`mt-6 block w-full text-center ${
+                  p.highlight ? "btn-primary" : "btn-secondary"
                 }`}
               >
                 {p.id === "onetime" ? "Buy once" : "Subscribe"}

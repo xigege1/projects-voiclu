@@ -27,8 +27,8 @@ export default function HomePage() {
   return (
     <div>
       {/* 1. H1 + 副标题：首屏不谈价格，谈结果 */}
-      <section className="bg-gradient-to-b from-[var(--brand-soft)] to-white py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 lg:flex lg:items-start lg:gap-12">
+      <section className="section-pad bg-gradient-to-b from-[var(--brand-soft)] to-white">
+        <div className="container-gutter mx-auto max-w-6xl lg:flex lg:items-start lg:gap-12">
           <div className="lg:max-w-xl">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">AI Voice Cloning</h1>
             <p className="mt-4 text-lg leading-8 text-gray-600">

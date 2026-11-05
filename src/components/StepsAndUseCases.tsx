@@ -41,14 +41,14 @@ export default function StepsAndUseCases() {
   return (
     <>
       {/* 三步说明：H1 后需要 H2 承接，避免 H1 → H3 跳级 */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section className="section-pad">
+        <div className="container-gutter mx-auto max-w-6xl">
           <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             How it works
           </h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
             {STEPS.map((s) => (
-              <div key={s.n} className="rounded-2xl border border-gray-100 p-6">
+              <div key={s.n} className="rounded-xl border border-gray-100 p-6">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--brand-soft)] font-bold text-[var(--brand)]">
                   {s.n}
                 </div>
@@ -61,14 +61,14 @@ export default function StepsAndUseCases() {
       </section>
 
       {/* 使用场景：标题扩成可读段落（首页正文量的主要来源） */}
-      <section className="bg-[var(--brand-soft)] py-20 sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section className="section-pad bg-[var(--brand-soft)]">
+        <div className="container-gutter mx-auto max-w-6xl">
           <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             What people build with it
           </h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {USE_CASES.map((u) => (
-              <div key={u.title} className="rounded-2xl bg-white p-6">
+              <div key={u.title} className="rounded-xl bg-white p-6">
                 <h3 className="font-semibold text-gray-900">{u.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-gray-600">{u.body}</p>
               </div>

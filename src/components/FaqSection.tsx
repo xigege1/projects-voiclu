@@ -2,10 +2,10 @@ import { FAQ_HOME } from "@/lib/constants";
 
 export default function FaqSection() {
   return (
-    <section className="py-16">
-      <div className="mx-auto max-w-3xl px-4">
+    <section className="section-pad">
+      <div className="container-gutter mx-auto max-w-3xl">
         <h2 className="text-center text-2xl font-bold tracking-tight">FAQ</h2>
-        <div className="mt-8 divide-y divide-gray-100 rounded-2xl border border-gray-100">
+        <div className="mt-8 divide-y divide-gray-100 rounded-xl border border-gray-100">
           {FAQ_HOME.map((f) => (
             <details key={f.q} className="p-5">
               <summary className="cursor-pointer font-medium">{f.q}</summary>

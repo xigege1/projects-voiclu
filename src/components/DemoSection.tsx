@@ -35,7 +35,7 @@ const EMOTION_PAIRS: Pair[] = [
 
 function PairPlayer({ p, fallback }: { p: Pair; fallback: string }) {
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-5">
+    <div className="rounded-xl border border-gray-100 bg-white p-5 sm:p-6">
       <div className="mb-1 text-sm font-semibold text-gray-900">{p.lang}</div>
       <div className="mb-4 text-xs text-gray-500">{p.tag}</div>
 
@@ -59,8 +59,8 @@ function PairPlayer({ p, fallback }: { p: Pair; fallback: string }) {
 
 export default function DemoSection() {
   return (
-    <section className="bg-gray-50 py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section className="section-pad bg-gray-50">
+      <div className="container-gutter mx-auto max-w-6xl">
         <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Hear the same voice in 6 languages
         </h2>

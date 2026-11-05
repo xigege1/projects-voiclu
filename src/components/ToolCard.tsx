@@ -178,7 +178,7 @@ export default function ToolCard() {
   }
 
   return (
-    <div id="clone" className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+    <div id="clone" className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
       {/* tabs */}
       <div className="mb-5 flex rounded-xl bg-gray-100 p-1 text-sm font-medium">
         <button
@@ -252,7 +252,7 @@ export default function ToolCard() {
           <button
             onClick={doClone}
             disabled={busy}
-            className="mt-4 w-full rounded-xl bg-[var(--brand)] py-3 font-semibold text-white hover:bg-[#5b21b6] disabled:opacity-50"
+            className="btn-primary mt-4 w-full disabled:opacity-50"
           >
             {busy ? "Working…" : "Clone my voice"}
           </button>
@@ -291,7 +291,7 @@ export default function ToolCard() {
             <button
               onClick={doTts}
               disabled={busy}
-              className="flex-1 rounded-xl bg-[var(--brand)] py-3 font-semibold text-white hover:bg-[#5b21b6] disabled:opacity-50"
+              className="btn-primary flex-1 disabled:opacity-50"
             >
               {busy ? "Generating…" : "Generate audio"}
             </button>
@@ -323,7 +323,7 @@ export default function ToolCard() {
       {/* 付费弹窗：402 时弹，绝不 disable 按钮 */}
       {paywall && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setPaywall(false)}>
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-sm rounded-xl bg-white p-6 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold">Your free generation is used</h3>
             <p className="mt-2 text-sm text-gray-600">
               Starter is $9.9/month for 20,000 characters (~20 min), commercial license included.
@@ -331,7 +331,7 @@ export default function ToolCard() {
             </p>
             <a
               href="/pricing"
-              className="mt-4 block rounded-lg bg-[var(--brand)] py-2.5 text-sm font-semibold text-white"
+              className="btn-primary mt-4 w-full"
             >
               See plans
             </a>

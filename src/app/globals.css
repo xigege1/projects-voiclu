@@ -14,6 +14,71 @@
   --color-brand-soft: var(--brand-soft);
 }
 
+/* ===== 视觉规范统一（审阅 B §3.5）=====
+ * 栅格：内容最大宽 1120px；区块间距 80px(移动)/120px(桌面)；卡片内边距 24/32px
+ * 圆角：卡片 12px、按钮 12px、徽章/圆钮 full
+ * 按钮：高度 44px(常规)/48px(主 CTA)
+ * 用 Tailwind v4 自定义 utilities，新增组件时直接引用，杜绝各自为政。
+ */
+@layer utilities {
+  /* 区块：上下 80px，桌面 120px */
+  .section-pad {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  @media (min-width: 768px) {
+    .section-pad {
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+  }
+
+  /* 内容容器：留白 24px(移动)/48px(桌面) */
+  .container-gutter {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .container-gutter {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+
+  /* 主 CTA 按钮：48px 高、12px 圆角 */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    border-radius: var(--radius-xl, 0.75rem);
+    background: var(--brand);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+  .btn-primary:hover {
+    background: #5b21b6;
+  }
+
+  /* 次按钮：44px 高、12px 圆角 */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.75rem;
+    border-radius: var(--radius-xl, 0.75rem);
+    border: 1px solid #e5e7eb;
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 0.875rem;
+    background: #fff;
+  }
+  .btn-secondary:hover {
+    border-color: var(--brand);
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

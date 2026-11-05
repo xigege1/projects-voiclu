@@ -4,7 +4,7 @@ import { SITE } from "@/lib/constants";
 export default function Footer() {
   return (
     <footer className="border-t border-gray-100 bg-gray-50">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm text-gray-600 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="container-gutter mx-auto grid max-w-6xl gap-8 py-10 text-sm text-gray-600 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="font-bold text-gray-900">{SITE.name}</div>
           <p className="mt-2 leading-6">

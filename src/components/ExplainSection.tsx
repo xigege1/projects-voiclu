@@ -17,8 +17,8 @@ const COMPARISON = [
 
 export default function ExplainSection() {
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section className="section-pad">
+      <div className="container-gutter mx-auto max-w-6xl">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* 左：正文 */}
           <div>
@@ -59,7 +59,7 @@ export default function ExplainSection() {
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Voiclu vs ElevenLabs
             </h2>
-            <div className="mt-5 overflow-hidden rounded-2xl border border-gray-100">
+            <div className="mt-5 overflow-hidden rounded-xl border border-gray-100">
               <table className="w-full border-collapse text-left text-sm">
                 <thead>
                   <tr className="bg-[var(--brand-soft)] text-gray-900">

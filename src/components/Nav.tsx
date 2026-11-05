@@ -12,7 +12,7 @@ const NAV_LINKS = [
 export default function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+      <div className="container-gutter mx-auto flex h-14 max-w-6xl items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
           <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--brand)] text-sm text-white">V</span>
           {SITE.name}
@@ -25,7 +25,7 @@ export default function Nav() {
           ))}
           <Link
             href="/#clone"
-            className="rounded-full bg-[var(--brand)] px-4 py-1.5 text-white hover:bg-[#5b21b6]"
+            className="rounded-full bg-[var(--brand)] px-4 py-1.5 text-sm text-white hover:bg-[#5b21b6]"
           >
             Try free
           </Link>
