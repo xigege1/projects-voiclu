@@ -3,6 +3,7 @@ import Link from "next/link";
 import ToolCard from "@/components/ToolCard";
 import DemoSection from "@/components/DemoSection";
 import StepsAndUseCases from "@/components/StepsAndUseCases";
+import ExplainSection from "@/components/ExplainSection";
 import PricingSection from "@/components/PricingSection";
 import FaqSection from "@/components/FaqSection";
 import FaqJsonLd from "@/components/FaqJsonLd";
@@ -53,11 +54,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3+4. 三步说明 + demo 对比区（预生成，不调 API） */}
+      {/* 3. 三步说明（H2: How it works）+ 使用场景（H2: What people build with it） */}
       <StepsAndUseCases />
+
+      {/* 4. 成对试听区（H2: Hear the same voice in 6 languages，预生成，不调 API） */}
       <DemoSection />
 
-      {/* 5+6. 使用场景已在上方组件中；价格三档 */}
+      {/* 4.5 首页正文（H2: What is AI voice cloning?）+ 对比表（H2: Voiclu vs ElevenLabs） */}
+      <ExplainSection />
+
+      {/* 5. 价格三档 */}
       <PricingSection />
 
       {/* 7. FAQ 8 条 */}
