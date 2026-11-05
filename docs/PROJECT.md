@@ -230,7 +230,7 @@ cacheKey = sha256(provider_voice_id | lang | text)
 | # | 事项 | 影响 | 备注 |
 |---|---|---|---|
 | 1 | Supabase 建项目 + 执行 `sql/schema.sql` + 取 3 个 key | 没有它全部 API 报错 | Auth 里要打开 Email OTP，Site URL 填 `https://voiclu.com` |
-| 2 | ElevenLabs API Key | 克隆和合成不可用 | Instant Voice Cloning 需付费档（Starter 起） |
+| 2 | ElevenLabs API Key | 克隆和合成不可用 | 免费层级就能拿到 key，先配 `ELEVENLABS_DEMO_VOICE_ID` 用预置声音跑通全链路（见 5.5）；真实克隆需 Starter $6/月起 |
 | 3 | Cloudflare R2：建 bucket + 公开域名 + API Token（6 个变量） | 音频存不下来 | 建议绑 `cdn.voiclu.com` |
 | 4 | Creem 注册 + 建 4 个产品 + webhook 密钥 | 收不了钱 | webhook 指向 `https://voiclu.com/api/webhooks/creem`；要真买一单验证 |
 | 5 | 填 `.env.local` → `bash scripts/push-env.sh` → 重新部署 | 11 个必需变量仍是空的 | `NEXT_PUBLIC_*` 不重新部署不生效 |
@@ -253,6 +253,36 @@ cacheKey = sha256(provider_voice_id | lang | text)
 | **域名 HTTPS 握手失败** | HTTP 200 但 TLS 直接 EOF，`domains verify` 却返回 verified | **证书没触发签发**（不是 DNS 错） | 把域名从项目摘掉再重新添加，1 分钟内签发 |
 | sitemap `lastmod` 每次都变 | 每次请求都是当前时间 | 用了 `new Date()` | 改成固定常量 `CONTENT_UPDATED` |
 | `.gitignore` 漏掉模板 | `.env*` 把 `.env.example` 也忽略了 | 默认规则过宽 | 加 `!.env.example` 例外 |
+
+### 5.5 ElevenLabs 免费层级验证方案（演示模式）
+
+**背景**：ElevenLabs 免费计划（$0，10k credits/月）**不包含 Instant Voice Cloning**，调 `/v1/voices/add` 会返回 401。IVC 从 Starter（$6/月，30k credits，10 个声音槽）起才有；Professional Voice Cloning 要 Creator（$22/月）。
+
+**做法**：`ELEVENLABS_DEMO_VOICE_ID` 存在时，`cloneVoice()` 跳过真实 API，直接返回该预置声音的 `voice_id`。TTS 仍真实调用 ElevenLabs、真实写 R2、真实扣额度、真实走缓存。
+
+配置步骤：
+
+```bash
+# 1. elevenlabs.io → 头像 → API Keys，建 key 填进 .env.local 的 ELEVENLABS_API_KEY
+# 2. 一条命令：查层级 + 剩余额度 + 列出声音 + 自动写入 DEMO_VOICE_ID
+node scripts/check-elevenlabs.mjs
+# 3. 推环境变量 + 重新部署
+bash scripts/push-env.sh && npx vercel deploy --prod --yes
+```
+
+**能验证 / 验不了**：
+
+| 环节 | 免费+演示模式 |
+|---|---|
+| 上传、时长/格式/静音校验、consent 勾选门槛 | ✅ 真实 |
+| `voices` 表落库（含 `consent_at` / `consent_ip`） | ✅ 真实（`provider` 存 `elevenlabs-demo` 以便区分） |
+| TTS 合成、写 R2、`cdn.voiclu.com` 公开播放 | ✅ 真实 |
+| 额度和计费、缓存命中不扣费、转化邮件 | ✅ 真实 |
+| 克隆出来像不像你自己 | ❌ 验不了 |
+
+**升级路径**：ElevenLabs 换成 Starter 后，把 `ELEVENLABS_DEMO_VOICE_ID` 清空 → 重新部署，代码零改动，自动切回真实克隆。历史演示行可用 `select * from voices where provider = 'elevenlabs-demo'` 找出来清理。
+
+**注意**：免费额度只有 10k credits ≈ 66 次 150 字符的试听；且免费身份的免费额度**每身份只有 1 次**，测试时用无痕窗口（匿名身份靠 cookie 区分）。
 
 ---
 

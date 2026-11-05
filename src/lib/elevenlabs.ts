@@ -8,6 +8,25 @@
  */
 const API = "https://api.elevenlabs.io/v1";
 
+/**
+ * 【演示 / 验证模式】
+ * ElevenLabs 的 Instant Voice Cloning 需要 Starter（$6/月）及以上，
+ * 免费额度（10k credits/月）只能做 TTS，调 /voices/add 会直接 401。
+ *
+ * 所以设了这个变量后：
+ *   - 克隆步骤跳过真实 API，直接返回一个官方预置声音的 voice_id
+ *   - TTS 仍然真实调用 ElevenLabs（消耗免费 credits），真实写 R2、真实扣额度
+ *   → 上传 → 存库 → 合成 → 转存 → 播放 → 计费 → 缓存 全链路都能零成本验证
+ *
+ * 不设这个变量 = 真实克隆，生产环境不要设。
+ */
+const DEMO_VOICE_ID = process.env.ELEVENLABS_DEMO_VOICE_ID?.trim() || "";
+
+/** 当前是否处于「模拟克隆」模式 */
+export function demoCloneMode(): boolean {
+  return DEMO_VOICE_ID.length > 0;
+}
+
 function key(): string {
   const k = process.env.ELEVENLABS_API_KEY;
   if (!k) throw new Error("Missing ELEVENLABS_API_KEY — see .env.example");
@@ -23,6 +42,12 @@ export async function cloneVoice(
   file: File,
   name: string
 ): Promise<string> {
+  // 演示模式：不碰 API，直接返回预置声音（免费计划也能跑通全链路）
+  if (demoCloneMode()) {
+    console.warn(`[elevenlabs] DEMO clone mode — "${name}" mapped to stock voice ${DEMO_VOICE_ID}`);
+    return DEMO_VOICE_ID;
+  }
+
   const form = new FormData();
   form.append("name", name);
   form.append("files", file, file.name || "sample.wav");
@@ -34,6 +59,13 @@ export async function cloneVoice(
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
+    // 免费/未开通计划调克隆接口 → 401 或 403，给出可操作的提示而不是一坨 JSON
+    if (res.status === 401 || res.status === 403) {
+      throw new Error(
+        "Voice cloning needs an ElevenLabs Starter plan or higher (the free tier only allows text to speech). " +
+          "Upgrade the ElevenLabs account, or set ELEVENLABS_DEMO_VOICE_ID to test the flow with a stock voice."
+      );
+    }
     throw new Error(`ElevenLabs clone failed (${res.status}): ${text.slice(0, 300)}`);
   }
   const data = (await res.json()) as { voice_id: string };
@@ -71,6 +103,12 @@ export async function synthesize(voiceId: string, text: string): Promise<Buffer>
   });
   if (!res.ok) {
     const text2 = await res.text().catch(() => "");
+    // 免费 credits 用尽 / key 无权限 —— 别把 provider 的 JSON 直接甩给用户
+    if (res.status === 401 || res.status === 402 || text2.includes("quota_exceeded")) {
+      throw new Error(
+        "ElevenLabs credit limit reached for this account. Top up or upgrade the ElevenLabs plan, then retry."
+      );
+    }
     throw new Error(`ElevenLabs TTS failed (${res.status}): ${text2.slice(0, 300)}`);
   }
   return Buffer.from(await res.arrayBuffer());

@@ -35,6 +35,7 @@ export default function ToolCard() {
   const [authOpen, setAuthOpen] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [voiceId, setVoiceId] = useState<string | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
   const mediaRef = useRef<MediaRecorder | null>(null);
 
   // ---------- 前端音频检测：时长 + 粗略峰值 ----------
@@ -134,7 +135,12 @@ export default function ToolCard() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message ?? "Clone failed");
       setVoiceId(data.voiceId);
-      setStage("Voice ready. Switch to Text to Speech or type below.");
+      setDemoMode(Boolean(data.demo));
+      setStage(
+        data.demo
+          ? "Demo mode: a stock voice was used. Text to Speech below is fully live."
+          : "Voice ready. Switch to Text to Speech or type below."
+      );
       setTab("tts");
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Clone failed");
@@ -253,6 +259,12 @@ export default function ToolCard() {
         </div>
       ) : (
         <div>
+          {demoMode && (
+            <p className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-[11px] leading-5 text-amber-700">
+              <strong>Demo mode.</strong> Voice cloning isn&apos;t active on this server — a stock voice
+              stands in for your clone so you can test the whole flow. Text to Speech is fully live.
+            </p>
+          )}
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}

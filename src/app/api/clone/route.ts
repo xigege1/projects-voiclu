@@ -8,7 +8,7 @@
 import { NextResponse } from "next/server";
 import { resolveIdentity } from "@/lib/identity";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { cloneVoice } from "@/lib/elevenlabs";
+import { cloneVoice, demoCloneMode } from "@/lib/elevenlabs";
 import { MAX_UPLOAD_MB, MIN_AUDIO_SEC, MAX_AUDIO_SEC } from "@/lib/constants";
 
 
@@ -63,6 +63,8 @@ export async function POST(req: Request) {
     }
 
     // ---- 调 ElevenLabs Instant Voice Cloning ----
+    // ELEVENLABS_DEMO_VOICE_ID 存在时为「模拟克隆」：只验流程，不产生真克隆
+    const demo = demoCloneMode();
     const providerVoiceId = await cloneVoice(audio, name);
 
     // ---- consent 时间 + IP 落库（voices.consent_at / consent_ip） ----
@@ -75,7 +77,8 @@ export async function POST(req: Request) {
       .from("voices")
       .insert({
         user_id: identity.userId,
-        provider: "elevenlabs",
+        // demo 行单独标记，升级真克隆后可一键筛出来清理
+        provider: demo ? "elevenlabs-demo" : "elevenlabs",
         provider_voice_id: providerVoiceId,
         name,
         status: "active",
@@ -91,6 +94,7 @@ export async function POST(req: Request) {
       voiceId: voiceRow.id,
       providerVoiceId,
       voiceName: name,
+      demo,
       // 提示前端：时长校验建议在前端已做过（Audio API 检测 30s~3min、静音、峰值）
       limits: { minSec: MIN_AUDIO_SEC, maxSec: MAX_AUDIO_SEC },
     });
