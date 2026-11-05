@@ -37,9 +37,20 @@ npm run dev                  # http://localhost:3000
 
 ## 上线步骤（必须你本人操作的清单）
 
-1. **GitHub 私有仓库**：`git remote add origin … && git push -u origin main`
-2. **Vercel**：导入仓库，环境变量粘贴 .env.local 全部内容，Deploy
-3. **Cloudflare DNS**：`voiclu.com` 的 A/CNAME 指向 Vercel，**先 DNS only**，证书正常后再开代理
+> **当前状态（2026-11-05）**：GitHub `xigege1/projects-voiclu` 已推送；Vercel 项目 `voiclu`（team xigege2）已部署且已接 GitHub 自动部署；`voiclu.vercel.app` 全部路由 200；`voiclu.com` 与 `www.voiclu.com` 已添加到项目，**只差 Cloudflare DNS 两条记录**。环境变量仅配了 `NEXT_PUBLIC_SITE_URL` / `NEXT_PUBLIC_SUPPORT_EMAIL`，其余待填（填完需 redeploy 才生效）。
+
+**Cloudflare DNS 要加的两条（Proxy 必须是 DNS only / 灰云）：**
+
+| Type | Name | Content |
+|---|---|---|
+| CNAME | `@` | `2833759d9d5b7e9e.vercel-dns-017.com` |
+| CNAME | `www` | `2833759d9d5b7e9e.vercel-dns-017.com` |
+
+加完跑 `npx vercel domains verify voiclu.com` 确认，证书自动签发。
+
+1. **GitHub 私有仓库**：`git remote add origin … && git push -u origin main` ✅ 已完成（remote 用 SSH）
+2. **Vercel**：✅ 已部署 `https://voiclu.app` / `voiclu.vercel.app`；后续 `git push` 自动触发部署
+3. **Cloudflare DNS**：⬜ 加上面两条 CNAME（先 DNS only，证书正常后再视情况开代理）
 4. **GSC**：加"网域资源" `voiclu.com`，Cloudflare 加 TXT 验证 → Sitemaps 提交 `sitemap.xml` → 网址检查首页 → 请求编入索引
 5. **Umami/GA4**：拿 `NEXT_PUBLIC_UMAMI_*` 填入（或把 GA4 脚本加进 `layout.tsx`）
 6. **demo 音频**：用真实账号克隆自己的声音，跑 6 条合成（原声×2、克隆英文×2、克隆葡语×2），文件按此命名放进 `public/demo/`：
