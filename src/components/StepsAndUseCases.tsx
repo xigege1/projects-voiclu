@@ -1,4 +1,5 @@
 import { LANG_COUNT_LABEL } from "@/lib/constants";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 const STEPS = [
   {
@@ -48,13 +49,15 @@ export default function StepsAndUseCases() {
           </h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
             {STEPS.map((s) => (
-              <div key={s.n} className="rounded-xl border border-gray-100 p-6">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--brand-soft)] font-bold text-[var(--brand)]">
+              <Card key={s.n} className="items-start p-6">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 font-bold text-primary">
                   {s.n}
                 </div>
-                <h3 className="mt-4 font-semibold text-gray-900">{s.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">{s.desc}</p>
-              </div>
+                <CardTitle className="mt-4 text-base">{s.title}</CardTitle>
+                <CardContent className="px-0 text-sm leading-6 text-muted-foreground">
+                  {s.desc}
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
@@ -68,10 +71,12 @@ export default function StepsAndUseCases() {
           </h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {USE_CASES.map((u) => (
-              <div key={u.title} className="rounded-xl bg-white p-6">
-                <h3 className="font-semibold text-gray-900">{u.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">{u.body}</p>
-              </div>
+              <Card key={u.title} className="items-start p-6">
+                <CardTitle className="text-base">{u.title}</CardTitle>
+                <CardContent className="px-0 text-sm leading-6 text-muted-foreground">
+                  {u.body}
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>

@@ -22,10 +22,10 @@ export default function ExplainSection() {
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* 左：正文 */}
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               What is AI voice cloning?
             </h2>
-            <div className="mt-5 space-y-4 text-base leading-7 text-gray-600">
+            <div className="mt-5 space-y-4 text-base leading-7 text-muted-foreground">
               <p>
                 Voice cloning turns a short recording of your voice into a digital copy that can
                 speak new text you never recorded. You upload 30 seconds to 3 minutes of clean
@@ -56,13 +56,13 @@ export default function ExplainSection() {
 
           {/* 右：5 行对比表 */}
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Voiclu vs ElevenLabs
             </h2>
-            <div className="mt-5 overflow-hidden rounded-xl border border-gray-100">
+            <div className="mt-5 overflow-hidden rounded-xl border bg-card">
               <table className="w-full border-collapse text-left text-sm">
                 <thead>
-                  <tr className="bg-[var(--brand-soft)] text-gray-900">
+                  <tr className="bg-muted text-foreground">
                     <th className="px-4 py-3 font-semibold"></th>
                     <th className="px-4 py-3 font-semibold">Voiclu</th>
                     <th className="px-4 py-3 font-semibold">ElevenLabs</th>
@@ -70,18 +70,18 @@ export default function ExplainSection() {
                 </thead>
                 <tbody>
                   {COMPARISON.map((row, i) => (
-                    <tr key={row.k} className={i % 2 ? "bg-gray-50" : "bg-white"}>
-                      <td className="px-4 py-3 font-medium text-gray-900">{row.k}</td>
-                      <td className="px-4 py-3 text-gray-700">{row.voiclu}</td>
-                      <td className="px-4 py-3 text-gray-500">{row.eleven}</td>
+                    <tr key={row.k} className={i % 2 ? "bg-muted/40" : "bg-card"}>
+                      <td className="px-4 py-3 font-medium text-foreground">{row.k}</td>
+                      <td className="px-4 py-3 text-foreground/90">{row.voiclu}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{row.eleven}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <p className="mt-4 text-sm text-gray-500">
+            <p className="mt-4 text-sm text-muted-foreground">
               See the full breakdown on{" "}
-              <Link href="/alternatives" className="font-medium text-[var(--brand)] underline">
+              <Link href="/alternatives" className="font-medium text-primary underline">
                 the alternatives page
               </Link>
               .

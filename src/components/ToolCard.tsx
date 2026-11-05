@@ -11,6 +11,7 @@
  */
 import { useRef, useState } from "react";
 import AuthDialog from "./AuthDialog";
+import { Button } from "@/components/ui/button";
 import { webmToWavFile } from "@/lib/wav";
 
 const LANGS = [
@@ -178,7 +179,7 @@ export default function ToolCard() {
   }
 
   return (
-    <div id="clone" className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+    <div id="clone" className="rounded-xl border bg-card p-5 shadow-sm sm:p-6">
       {/* tabs */}
       <div className="mb-5 flex rounded-xl bg-gray-100 p-1 text-sm font-medium">
         <button
@@ -249,13 +250,13 @@ export default function ToolCard() {
             </span>
           </label>
 
-          <button
+          <Button
             onClick={doClone}
             disabled={busy}
-            className="btn-primary mt-4 w-full disabled:opacity-50"
+            className="mt-4 w-full"
           >
             {busy ? "Working…" : "Clone my voice"}
-          </button>
+          </Button>
         </div>
       ) : (
         <div>
@@ -288,13 +289,13 @@ export default function ToolCard() {
                 <option key={l.value} value={l.value}>{l.label}</option>
               ))}
             </select>
-            <button
+            <Button
               onClick={doTts}
               disabled={busy}
-              className="btn-primary flex-1 disabled:opacity-50"
+              className="flex-1"
             >
               {busy ? "Generating…" : "Generate audio"}
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -323,18 +324,15 @@ export default function ToolCard() {
       {/* 付费弹窗：402 时弹，绝不 disable 按钮 */}
       {paywall && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setPaywall(false)}>
-          <div className="w-full max-w-sm rounded-xl bg-white p-6 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-sm rounded-xl bg-card p-6 text-center shadow-xl" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold">Your free generation is used</h3>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-muted-foreground">
               Starter is $9.9/month for 20,000 characters (~20 min), commercial license included.
               30-day money-back guarantee.
             </p>
-            <a
-              href="/pricing"
-              className="btn-primary mt-4 w-full"
-            >
-              See plans
-            </a>
+            <Button asChild className="mt-4 w-full">
+              <a href="/pricing">See plans</a>
+            </Button>
             <button onClick={() => setPaywall(false)} className="mt-3 text-xs text-gray-400">
               Maybe later
             </button>

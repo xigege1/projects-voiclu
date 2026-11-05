@@ -7,6 +7,9 @@ import ExplainSection from "@/components/ExplainSection";
 import PricingSection from "@/components/PricingSection";
 import FaqSection from "@/components/FaqSection";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Check } from "lucide-react";
 import { FAQ_HOME, LANG_COUNT_LABEL } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -23,32 +26,50 @@ export const metadata: Metadata = {
   },
 };
 
+const HERO_CHIPS = [
+  "Commercial license on paid plans",
+  "Consent required on every clone",
+  "30-day money-back",
+];
+
 export default function HomePage() {
   return (
     <div>
       {/* 1. H1 + 副标题：首屏不谈价格，谈结果 */}
-      <section className="section-pad bg-gradient-to-b from-[var(--brand-soft)] to-white">
-        <div className="container-gutter mx-auto max-w-6xl lg:flex lg:items-start lg:gap-12">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_0%,var(--brand-soft),transparent)]" />
+        <div className="container-gutter mx-auto max-w-6xl py-16 sm:py-24 lg:flex lg:items-center lg:gap-14">
           <div className="lg:max-w-xl">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">AI Voice Cloning</h1>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
+            <Badge variant="secondary" className="mb-5">
+              <Check className="size-3.5" /> Clone once, dub everything
+            </Badge>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              AI Voice Cloning
+            </h1>
+            <p className="mt-5 text-lg leading-8 text-muted-foreground">
               30 seconds of audio → your voice speaking {LANG_COUNT_LABEL} languages.
               Clone once, dub everything, never re-record.
             </p>
-            <p className="mt-3 text-sm text-gray-500">
-              Free to try · No sign-up · No credit card ·{" "}
-              <Link href="/free" className="font-medium text-[var(--brand)] underline">
-                how the free tier works
-              </Link>
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2 text-xs text-gray-500">
-              <span className="rounded-full bg-white px-3 py-1 shadow-sm">Commercial license on paid plans</span>
-              <span className="rounded-full bg-white px-3 py-1 shadow-sm">Consent required on every clone</span>
-              <span className="rounded-full bg-white px-3 py-1 shadow-sm">30-day money-back</span>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Button asChild size="lg">
+                <Link href="/#clone">
+                  Clone your voice <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/free">How the free tier works</Link>
+              </Button>
+            </div>
+            <div className="mt-7 flex flex-wrap gap-2">
+              {HERO_CHIPS.map((c) => (
+                <Badge key={c} variant="outline" className="font-normal text-muted-foreground">
+                  {c}
+                </Badge>
+              ))}
             </div>
           </div>
           {/* 2. 工具卡 */}
-          <div className="mt-10 flex-1 lg:mt-0">
+          <div className="mt-12 flex-1 lg:mt-0">
             <ToolCard />
           </div>
         </div>

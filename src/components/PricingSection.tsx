@@ -1,58 +1,71 @@
 import Link from "next/link";
 import { PLANS, ANNUAL_NOTE } from "@/lib/constants";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function PricingSection({ compact = false }: { compact?: boolean }) {
   return (
     <section id="pricing" className={compact ? "" : "section-pad"}>
       <div className="container-gutter mx-auto max-w-6xl">
-        <h2 className="text-center text-3xl font-bold tracking-tight">Simple pricing</h2>
-        <p className="mt-2 text-center text-gray-500">
+        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">Simple pricing</h2>
+        <p className="mx-auto mt-3 max-w-2xl text-center text-muted-foreground">
           Pay per character, never per minute of silence. 1,000 characters ≈ 1 minute of audio.
         </p>
-        <p className="mt-1 text-center text-sm text-gray-400">{ANNUAL_NOTE}</p>
+        <p className="mt-1 text-center text-sm text-muted-foreground">{ANNUAL_NOTE}</p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {PLANS.map((p) => (
-            <div
+            <Card
               key={p.id}
-              className={`relative rounded-xl border p-6 sm:p-8 ${
-                p.highlight
-                  ? "border-[var(--brand)] shadow-lg ring-1 ring-[var(--brand)]"
-                  : "border-gray-200"
-              }`}
+              className={cn(
+                "relative",
+                p.highlight && "border-primary shadow-lg shadow-primary/10 ring-1 ring-primary"
+              )}
             >
               {p.highlight && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[var(--brand)] px-3 py-0.5 text-xs font-semibold text-white">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
                   Most popular
-                </span>
+                </Badge>
               )}
-              <div className="text-sm font-semibold text-gray-500">{p.name}</div>
-              <div className="mt-2 flex items-baseline gap-1">
-                <span className="text-4xl font-bold">${p.price}</span>
-                <span className="text-gray-400">{p.period}</span>
-              </div>
-              <ul className="mt-5 space-y-2 text-sm text-gray-600">
-                {p.features.map((f) => (
-                  <li key={f} className="flex gap-2">
-                    <span className="text-[var(--brand)]">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              {/* TODO(checkout): 接入 Creem 后把 href 换成对应 checkout 链接（metadata 带 user_id + plan） */}
-              <a
-                href="/pricing"
-                className={`mt-6 block w-full text-center ${
-                  p.highlight ? "btn-primary" : "btn-secondary"
-                }`}
-              >
-                {p.id === "onetime" ? "Buy once" : "Subscribe"}
-              </a>
-            </div>
+              <CardHeader>
+                <CardTitle className="text-base font-semibold text-muted-foreground">
+                  {p.name}
+                </CardTitle>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold">${p.price}</span>
+                  <span className="text-muted-foreground">{p.period}</span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2.5 text-sm text-muted-foreground">
+                  {p.features.map((f) => (
+                    <li key={f} className="flex gap-2.5">
+                      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+              <CardFooter>
+                {/* TODO(checkout): 接入 Creem 后把 href 换成对应 checkout 链接 */}
+                <Button asChild className="w-full" variant={p.highlight ? "default" : "outline"}>
+                  <a href="/pricing">{p.id === "onetime" ? "Buy once" : "Subscribe"}</a>
+                </Button>
+              </CardFooter>
+            </Card>
           ))}
         </div>
 
-        <p className="mt-6 text-center text-xs text-gray-400">
+        <p className="mt-6 text-center text-xs text-muted-foreground">
           30-day money-back guarantee · Commercial license on all paid plans ·{" "}
           <Link href="/refund" className="underline">Refund policy</Link>
         </p>

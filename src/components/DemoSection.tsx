@@ -9,6 +9,8 @@
  * 音频缺失时降级为占位提示，结构不动，补文件即恢复。
  */
 
+import { Card } from "@/components/ui/card";
+
 type Pair = {
   id: string;
   lang: string;
@@ -35,36 +37,36 @@ const EMOTION_PAIRS: Pair[] = [
 
 function PairPlayer({ p, fallback }: { p: Pair; fallback: string }) {
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-5 sm:p-6">
-      <div className="mb-1 text-sm font-semibold text-gray-900">{p.lang}</div>
-      <div className="mb-4 text-xs text-gray-500">{p.tag}</div>
+    <Card className="items-start p-5">
+      <div className="mb-1 text-sm font-semibold">{p.lang}</div>
+      <div className="mb-4 text-xs text-muted-foreground">{p.tag}</div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid w-full gap-3 sm:grid-cols-2">
         <div>
-          <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-gray-400">Original</div>
+          <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Original</div>
           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
           <audio controls preload="none" src={`/demo/${p.original}`} className="w-full" />
         </div>
         <div>
-          <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-gray-400">Clone</div>
+          <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Clone</div>
           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
           <audio controls preload="none" src={`/demo/${p.clone}`} className="w-full" />
         </div>
       </div>
 
-      <p className="mt-3 text-xs text-gray-400">{fallback}</p>
-    </div>
+      <p className="mt-3 text-xs text-muted-foreground">{fallback}</p>
+    </Card>
   );
 }
 
 export default function DemoSection() {
   return (
-    <section className="section-pad bg-gray-50">
+    <section className="section-pad bg-muted/40">
       <div className="container-gutter mx-auto max-w-6xl">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
           Hear the same voice in 6 languages
         </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-gray-500">
+        <p className="mx-auto mt-3 max-w-2xl text-center text-muted-foreground">
           The same sentence. The same voice. Only the language changes.
         </p>
 
@@ -74,7 +76,7 @@ export default function DemoSection() {
           ))}
         </div>
 
-        <h3 className="mt-14 text-center text-xl font-semibold text-gray-900">
+        <h3 className="mt-14 text-center text-xl font-semibold">
           Not just a new language — a new delivery
         </h3>
         <div className="mt-6 grid gap-5 md:grid-cols-3">
@@ -83,7 +85,7 @@ export default function DemoSection() {
           ))}
         </div>
 
-        <p className="mt-6 text-center text-xs text-gray-400">
+        <p className="mt-6 text-center text-xs text-muted-foreground">
           All samples are pre-generated. No sign-up, just press play.
         </p>
       </div>
