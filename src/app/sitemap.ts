@@ -18,8 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/pricing", 0.9, "weekly"],
     ["/free", 0.9, "weekly"],
     // 内容页（各自锁一个词族）
-    ["/alternatives", 0.8, "weekly"],
-    ["/best", 0.8, "weekly"],
+    // ⚠️ /alternatives 与 /best 暂移出 sitemap：正文含 [实测填写] 占位符，
+    // 页面已加 noindex，等真实试用填完后重新加回（改这一处即可）。
     ["/text-to-speech", 0.8, "weekly"],
     // 语言副本（与首页 hreflang 对应，漏了就是 hreflang 指向一个 sitemap 外的页面）
     ["/br", 0.7, "weekly"],

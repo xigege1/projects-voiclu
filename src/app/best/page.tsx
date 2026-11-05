@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: "Best AI Voice Clone Tools in 2026 — Tested and Ranked",
   description:
     "We tested the main AI voice cloning tools on audio quality, language coverage, price per minute and free limits. Here is what each one is actually good at.",
+  // 占位符 [实测填写] 未填完前先 noindex，避免被 Google 收录后用户看到方括号失去信任。
+  robots: { index: false, follow: true },
 };
 
 /**

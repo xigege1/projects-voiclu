@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: "11 Best ElevenLabs Alternatives for Voice Cloning (2026)",
   description:
     "Looking for an ElevenLabs alternative? Here are 11 options compared on price per minute, cloning quality, language support and licensing, plus which one fits which use case.",
+  // 占位符 [实测填写] 未填完前先 noindex，避免被 Google 收录后用户看到方括号失去信任。
+  robots: { index: false, follow: true },
 };
 
 /**
