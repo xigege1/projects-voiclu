@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-gray-700">
-      <h1 className="text-3xl font-bold text-gray-900">About Voiclu</h1>
-      <p className="mt-2 text-xs text-gray-400">A small, independent tool — not a venture-backed platform.</p>
+    <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-foreground/90">
+      <h1 className="text-3xl font-bold text-foreground">About Voiclu</h1>
+      <p className="mt-2 text-xs text-muted-foreground/70">A small, independent tool — not a venture-backed platform.</p>
 
       <div className="mt-8 space-y-8">
         <section>
-          <h2 className="text-base font-bold text-gray-900">What this is</h2>
+          <h2 className="text-base font-bold text-foreground">What this is</h2>
           <p className="mt-2">
             Voiclu clones a voice from 30 seconds of clean speech and lets that voice speak{" "}
             {LANG_COUNT_LABEL} languages. You record once, then type anything — the accent and
@@ -26,7 +26,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">Who runs it</h2>
+          <h2 className="text-base font-bold text-foreground">Who runs it</h2>
           <p className="mt-2">
             Voiclu is built and operated by a small independent team. We are deliberately not
             pretending to be a large company: there is no sales department, no enterprise tier, and
@@ -40,7 +40,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">How it works, plainly</h2>
+          <h2 className="text-base font-bold text-foreground">How it works, plainly</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>
               Your audio sample is sent to a third-party speech provider that builds the voice
@@ -62,7 +62,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">What we will not do</h2>
+          <h2 className="text-base font-bold text-foreground">What we will not do</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>Clone a voice without the speaker&apos;s permission.</li>
             <li>Clone public figures, celebrities or politicians.</li>
@@ -79,7 +79,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">Get in touch</h2>
+          <h2 className="text-base font-bold text-foreground">Get in touch</h2>
           <p className="mt-2">
             Anything at all:{" "}
             <a href={`mailto:${SITE.supportEmail}`} className="text-[var(--brand)] underline">
@@ -94,7 +94,7 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">The rest of the site</h2>
+          <h2 className="text-base font-bold text-foreground">The rest of the site</h2>
           <p className="mt-2">
             <Link href="/" className="text-[var(--brand)] underline">
               Clone your voice

@@ -28,11 +28,12 @@ export default function PricingSection({ compact = false }: { compact?: boolean 
               key={p.id}
               className={cn(
                 "relative",
-                p.highlight && "border-primary shadow-lg shadow-primary/10 ring-1 ring-primary"
+                p.highlight &&
+                  "border-transparent shadow-lg shadow-primary/10 [background:linear-gradient(var(--card),var(--card))_padding-box,linear-gradient(90deg,var(--grad-from),var(--grad-mid),var(--grad-to))_border-box]"
               )}
             >
               {p.highlight && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--grad-from)] via-[var(--grad-mid)] to-[var(--grad-to)] text-white">
                   Most popular
                 </Badge>
               )}
@@ -57,7 +58,11 @@ export default function PricingSection({ compact = false }: { compact?: boolean 
               </CardContent>
               <CardFooter>
                 {/* TODO(checkout): 接入 Creem 后把 href 换成对应 checkout 链接 */}
-                <Button asChild className="w-full" variant={p.highlight ? "default" : "outline"}>
+                <Button
+                  asChild
+                  className={cn("w-full", p.highlight && "btn-primary")}
+                  variant={p.highlight ? "default" : "outline"}
+                >
                   <a href="/pricing">{p.id === "onetime" ? "Buy once" : "Subscribe"}</a>
                 </Button>
               </CardFooter>

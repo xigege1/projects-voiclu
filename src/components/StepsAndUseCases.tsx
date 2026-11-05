@@ -44,13 +44,13 @@ export default function StepsAndUseCases() {
       {/* 三步说明：H1 后需要 H2 承接，避免 H1 → H3 跳级 */}
       <section className="section-pad">
         <div className="container-gutter mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             How it works
           </h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-3">
             {STEPS.map((s) => (
               <Card key={s.n} className="items-start p-6">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 font-bold text-primary">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--grad-from)] via-[var(--grad-mid)] to-[var(--grad-to)] font-bold text-white">
                   {s.n}
                 </div>
                 <CardTitle className="mt-4 text-base">{s.title}</CardTitle>
@@ -66,7 +66,7 @@ export default function StepsAndUseCases() {
       {/* 使用场景：标题扩成可读段落（首页正文量的主要来源） */}
       <section className="section-pad bg-[var(--brand-soft)]">
         <div className="container-gutter mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             What people build with it
           </h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

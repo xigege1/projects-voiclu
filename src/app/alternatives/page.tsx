@@ -34,14 +34,14 @@ export default function AlternativesPage() {
     <div>
       <section className="bg-[var(--brand-soft)] py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight">ElevenLabs Alternatives</h1>
-        <p className="mx-auto mt-3 max-w-xl text-gray-600">
+        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
           11 options compared on price per minute, cloning quality, language support and
           licensing — plus which one fits which use case.
         </p>
       </section>
 
       <article className="mx-auto max-w-4xl px-4 py-12">
-        <p className="leading-8 text-gray-700">
+        <p className="leading-8 text-foreground/90">
           ElevenLabs is the reference point for AI voice cloning, and for good reason — it
           is the tool most other tools are compared against. But it is also the wrong tool for
           some jobs: if you only need one voice in one language, if you need a fixed monthly
@@ -52,7 +52,7 @@ export default function AlternativesPage() {
 
         <div className="mt-10 space-y-8">
           {ALTS.map((a) => (
-            <section key={a.name} className="rounded-2xl border border-gray-100 p-5">
+            <section key={a.name} className="rounded-2xl border border-border/60 p-5">
               <h2 className="text-lg font-bold">
                 {a.name} — best for {a.best}
                 {a.ours && (
@@ -61,13 +61,13 @@ export default function AlternativesPage() {
                   </span>
                 )}
               </h2>
-              <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm text-gray-600 sm:grid-cols-2">
-                <div className="flex gap-2"><dt className="font-medium text-gray-800">Cloning from:</dt><dd>{a.fields.cloneFrom}</dd></div>
-                <div className="flex gap-2"><dt className="font-medium text-gray-800">Languages:</dt><dd>{a.fields.langs}</dd></div>
-                <div className="flex gap-2"><dt className="font-medium text-gray-800">Price:</dt><dd>{a.fields.price}</dd></div>
-                <div className="flex gap-2"><dt className="font-medium text-gray-800">Free tier:</dt><dd>{a.fields.free}</dd></div>
-                <div className="flex gap-2"><dt className="font-medium text-gray-800">Commercial license:</dt><dd>{a.fields.license}</dd></div>
-                <div className="flex gap-2"><dt className="font-medium text-gray-800">Limitation:</dt><dd>{a.fields.limit}</dd></div>
+              <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm text-muted-foreground sm:grid-cols-2">
+                <div className="flex gap-2"><dt className="font-medium text-foreground">Cloning from:</dt><dd>{a.fields.cloneFrom}</dd></div>
+                <div className="flex gap-2"><dt className="font-medium text-foreground">Languages:</dt><dd>{a.fields.langs}</dd></div>
+                <div className="flex gap-2"><dt className="font-medium text-foreground">Price:</dt><dd>{a.fields.price}</dd></div>
+                <div className="flex gap-2"><dt className="font-medium text-foreground">Free tier:</dt><dd>{a.fields.free}</dd></div>
+                <div className="flex gap-2"><dt className="font-medium text-foreground">Commercial license:</dt><dd>{a.fields.license}</dd></div>
+                <div className="flex gap-2"><dt className="font-medium text-foreground">Limitation:</dt><dd>{a.fields.limit}</dd></div>
               </dl>
             </section>
           ))}
@@ -75,7 +75,7 @@ export default function AlternativesPage() {
 
         <section className="mt-12 rounded-2xl bg-[var(--brand-soft)] p-6">
           <h2 className="text-lg font-bold">If you are cloning your own voice for dubbing</h2>
-          <p className="mt-2 text-sm leading-7 text-gray-700">
+          <p className="mt-2 text-sm leading-7 text-foreground/90">
             Voiclu is built for that one job: clone once from 30 seconds of audio, then output
             the same voice in {LANG_COUNT_LABEL} languages. $9.9/month, 20,000 characters,
             commercial license included.{" "}
@@ -83,7 +83,7 @@ export default function AlternativesPage() {
           </p>
         </section>
 
-        <p className="mt-8 text-sm text-gray-500">
+        <p className="mt-8 text-sm text-muted-foreground">
           Want the full comparison table instead? See{" "}
           <Link href="/best" className="text-[var(--brand)] underline">best AI voice clone tools</Link>.
         </p>

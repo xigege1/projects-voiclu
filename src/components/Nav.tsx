@@ -16,7 +16,7 @@ export default function Nav() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-lg">
       <div className="container-gutter mx-auto flex h-16 max-w-6xl items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-base font-semibold tracking-tight">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-[var(--grad-from)] via-[var(--grad-mid)] to-[var(--grad-to)] text-white">
             <AudioLines className="size-4" />
           </span>
           {SITE.name}
@@ -32,7 +32,7 @@ export default function Nav() {
             </Link>
           ))}
         </nav>
-        <Button asChild size="sm">
+        <Button asChild size="sm" className="btn-primary h-9">
           <Link href="/#clone">Try free</Link>
         </Button>
       </div>

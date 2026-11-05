@@ -45,33 +45,33 @@ function mailto(subject: string): string {
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-gray-700">
-      <h1 className="text-3xl font-bold text-gray-900">Contact us</h1>
-      <p className="mt-2 text-gray-500">
+    <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-foreground/90">
+      <h1 className="text-3xl font-bold text-foreground">Contact us</h1>
+      <p className="mt-2 text-muted-foreground">
         One inbox, read by the people who build the product. Pick the closest topic so it reaches the
         right queue.
       </p>
 
       <p className="mt-6 rounded-xl bg-[var(--brand-soft)] px-4 py-3">
-        <span className="font-semibold text-gray-900">Email:</span>{" "}
+        <span className="font-semibold text-foreground">Email:</span>{" "}
         <a href={`mailto:${SITE.supportEmail}`} className="font-medium text-[var(--brand)] underline">
           {SITE.supportEmail}
         </a>
         <br />
-        <span className="text-xs text-gray-600">
+        <span className="text-xs text-muted-foreground">
           No ticket portal, no chatbot. A real reply, usually the same day.
         </span>
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {CHANNELS.map((c) => (
-          <div key={c.tag} className="rounded-2xl border border-gray-200 p-5">
-            <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+          <div key={c.tag} className="rounded-2xl border border-border p-5">
+            <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               {c.tag}
             </span>
-            <h2 className="mt-3 text-base font-bold text-gray-900">{c.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">{c.desc}</p>
-            <p className="mt-3 text-xs text-gray-400">{c.sla}</p>
+            <h2 className="mt-3 text-base font-bold text-foreground">{c.title}</h2>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">{c.desc}</p>
+            <p className="mt-3 text-xs text-muted-foreground/70">{c.sla}</p>
             <a
               href={mailto(c.subject)}
               className="mt-3 inline-block rounded-lg bg-[var(--brand)] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5b21b6]"
@@ -83,7 +83,7 @@ export default function ContactPage() {
       </div>
 
       <section className="mt-10">
-        <h2 className="text-base font-bold text-gray-900">Before you write</h2>
+        <h2 className="text-base font-bold text-foreground">Before you write</h2>
         <ul className="mt-2 list-disc space-y-1 pl-5">
           <li>
             Refund terms are on the{" "}
@@ -111,7 +111,7 @@ export default function ContactPage() {
       </section>
 
       <section className="mt-8">
-        <h2 className="text-base font-bold text-gray-900">Business details</h2>
+        <h2 className="text-base font-bold text-foreground">Business details</h2>
         <p className="mt-2">
           Voiclu is operated as an independent online service and sells worldwide. Payments are
           handled by a third-party payment provider — we never see or store card numbers. For

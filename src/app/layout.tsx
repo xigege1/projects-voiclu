@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
   const umamiId = process.env.NEXT_PUBLIC_UMAMI_ID;
   return (
-    <html lang="en" className={cn("h-full", "antialiased", GeistSans.variable, "font-sans")}>
+    <html lang="en" className={cn("h-full", "antialiased", "dark", GeistSans.variable, "font-sans")}>
       <body className="flex min-h-full flex-col">
         {/* Umami 埋点：填了 NEXT_PUBLIC_UMAMI_SRC / _ID 才加载，没填零开销 */}
         {umamiSrc && umamiId && (

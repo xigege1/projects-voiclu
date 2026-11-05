@@ -36,13 +36,13 @@ export default function FreePage() {
         <div className="mx-auto max-w-6xl px-4 lg:flex lg:items-start lg:gap-12">
           <div className="lg:max-w-xl">
             <h1 className="text-4xl font-bold tracking-tight">Free AI Voice Cloning</h1>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
+            <p className="mt-4 text-lg leading-8 text-muted-foreground">
               One free generation, no sign-up, no credit card. Hear your own voice speak{" "}
               {LANG_COUNT_LABEL} languages in about 3 minutes.
             </p>
-            <div className="mt-8 space-y-8 text-sm leading-7 text-gray-700">
+            <div className="mt-8 space-y-8 text-sm leading-7 text-foreground/90">
               <div>
-                <h2 className="mb-2 text-base font-bold text-gray-900">What you get for free</h2>
+                <h2 className="mb-2 text-base font-bold text-foreground">What you get for free</h2>
                 <ul className="list-disc space-y-1 pl-5">
                   <li>One full generation — up to {FREE_CHARS} characters (roughly 30 seconds of audio)</li>
                   <li>All {LANG_COUNT_LABEL} languages unlocked in the free run</li>
@@ -51,14 +51,14 @@ export default function FreePage() {
                 </ul>
               </div>
               <div>
-                <h2 className="mb-2 text-base font-bold text-gray-900">What happens after your free generation</h2>
+                <h2 className="mb-2 text-base font-bold text-foreground">What happens after your free generation</h2>
                 <p>
                   You pick a plan when you want to generate again. Nothing is charged
                   automatically and we do not store a card on the free tier.
                 </p>
               </div>
               <div>
-                <h2 className="mb-2 text-base font-bold text-gray-900">Why we limit free runs to one</h2>
+                <h2 className="mb-2 text-base font-bold text-foreground">Why we limit free runs to one</h2>
                 <p>
                   Voice cloning costs us money on every generation — the compute is billed per
                   character. One free run lets you judge the quality honestly without turning the
@@ -79,14 +79,14 @@ export default function FreePage() {
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[480px] text-left text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-gray-500">
+                <tr className="border-b border-border text-muted-foreground">
                   <th className="py-2"> </th>
                   <th className="py-2">Free</th>
                   <th className="py-2">Starter $9.9/mo</th>
                   <th className="py-2">Creator $29/mo</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-border/60">
                 <tr>
                   <td className="py-2 font-medium">Generations</td>
                   <td>1</td>
@@ -120,18 +120,18 @@ export default function FreePage() {
               </tbody>
             </table>
           </div>
-          <p className="mt-4 text-sm text-gray-500">
+          <p className="mt-4 text-sm text-muted-foreground">
             Full details on the{" "}
             <Link href="/pricing" className="text-[var(--brand)] underline">pricing page</Link>.
             One-time $49 pack and annual plans are also available there.
           </p>
 
           <h2 className="mt-12 text-xl font-bold">FAQ</h2>
-          <div className="mt-4 divide-y divide-gray-100 rounded-xl border border-gray-100">
+          <div className="mt-4 divide-y divide-border/60 rounded-xl border border-border/60">
             {FREE_FAQ.map((f) => (
               <details key={f.q} className="p-4">
                 <summary className="cursor-pointer font-medium">{f.q}</summary>
-                <p className="mt-2 text-sm leading-6 text-gray-600">{f.a}</p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{f.a}</p>
               </details>
             ))}
           </div>

@@ -13,7 +13,7 @@ export default function PricingPage() {
     <div>
       <section className="bg-[var(--brand-soft)] py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight">Pricing</h1>
-        <p className="mx-auto mt-3 max-w-xl text-gray-600">
+        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
           One free generation to judge the quality. Then flat monthly pricing — your cost never
           moves when you rewrite a script.
         </p>
@@ -23,18 +23,18 @@ export default function PricingPage() {
 
       <section className="mx-auto max-w-3xl px-4 pb-16">
         <h2 className="text-xl font-bold">Pricing questions</h2>
-        <div className="mt-4 divide-y divide-gray-100 rounded-xl border border-gray-100">
+        <div className="mt-4 divide-y divide-border/60 rounded-xl border border-border/60">
           {FAQ_HOME.filter((_, i) => [0, 2, 4, 7].includes(i)).map((f) => (
             <details key={f.q} className="p-4">
               <summary className="cursor-pointer font-medium">{f.q}</summary>
-              <p className="mt-2 text-sm leading-6 text-gray-600">{f.a}</p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{f.a}</p>
             </details>
           ))}
           <details className="p-4">
             <summary className="cursor-pointer font-medium">
               What counts as a character?
             </summary>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
               Every character in the text you submit. We bill the same way our upstream provider
               bills us — 1 character = 1 credit, 1,000 characters ≈ 1 minute of finished audio —
               so the math is transparent.

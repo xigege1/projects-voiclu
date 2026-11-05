@@ -51,15 +51,15 @@ export default function BrPage() {
         <div className="mx-auto max-w-6xl px-4 lg:flex lg:items-start lg:gap-12">
           <div className="lg:max-w-xl">
             <h1 className="text-4xl font-bold tracking-tight">Clonagem de Voz com IA</h1>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
+            <p className="mt-4 text-lg leading-8 text-muted-foreground">
               Clone sua voz a partir de 30 segundos de áudio. Depois deixe ela falar{" "}
               {LANG_COUNT_LABEL} idiomas — sem precisar gravar outra vez.
             </p>
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-muted-foreground">
               Sem cadastro para testar · Licença comercial nos planos pagos · Sua voz continua sua
             </p>
 
-            <div className="mt-8 text-sm leading-7 text-gray-700">
+            <div className="mt-8 text-sm leading-7 text-foreground/90">
               <ol className="list-decimal space-y-2 pl-5">
                 <li><strong>Envie 30 segundos de áudio limpo</strong> — um lugar silencioso e sua voz normal bastam</li>
                 <li><strong>Escolha o idioma e cole o texto</strong> — {LANG_COUNT_LABEL} idiomas disponíveis</li>
@@ -69,9 +69,9 @@ export default function BrPage() {
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {USE_CASES.map((u) => (
-                <div key={u.title} className="rounded-xl bg-white p-4 shadow-sm">
+                <div key={u.title} className="rounded-xl bg-card p-4 shadow-sm">
                   <div className="font-semibold">{u.title}</div>
-                  <div className="mt-1 text-xs text-gray-500">{u.desc}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{u.desc}</div>
                 </div>
               ))}
             </div>
@@ -82,28 +82,28 @@ export default function BrPage() {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-14">
+      <section className="bg-muted/40 py-14">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-bold tracking-tight">Ouça antes de se cadastrar</h2>
-          <p className="mt-2 text-gray-500">A mesma frase. A mesma voz. Idiomas diferentes.</p>
+          <p className="mt-2 text-muted-foreground">A mesma frase. A mesma voz. Idiomas diferentes.</p>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl bg-white p-4 text-left">
+            <div className="rounded-xl bg-card p-4 text-left">
               <div className="text-sm font-semibold">Voz original</div>
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <audio controls preload="none" src="/demo/original-1.mp3" className="mt-2 w-full" />
             </div>
-            <div className="rounded-xl bg-white p-4 text-left">
+            <div className="rounded-xl bg-card p-4 text-left">
               <div className="text-sm font-semibold">Clone — inglês</div>
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <audio controls preload="none" src="/demo/clone-en-1.mp3" className="mt-2 w-full" />
             </div>
-            <div className="rounded-xl bg-white p-4 text-left">
+            <div className="rounded-xl bg-card p-4 text-left">
               <div className="text-sm font-semibold">Clone — português</div>
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <audio controls preload="none" src="/demo/clone-pt-1.mp3" className="mt-2 w-full" />
             </div>
           </div>
-          <p className="mt-4 text-xs text-gray-400">
+          <p className="mt-4 text-xs text-muted-foreground/70">
             Todas as amostras são pré-geradas. Sem cadastro, só apertar play.
           </p>
         </div>
@@ -112,11 +112,11 @@ export default function BrPage() {
       <section className="py-14">
         <div className="mx-auto max-w-3xl px-4">
           <h2 className="text-xl font-bold">Perguntas frequentes</h2>
-          <div className="mt-4 divide-y divide-gray-100 rounded-xl border border-gray-100">
+          <div className="mt-4 divide-y divide-border/60 rounded-xl border border-border/60">
             {FAQ.map((f) => (
               <details key={f.q} className="p-4">
                 <summary className="cursor-pointer font-medium">{f.q}</summary>
-                <p className="mt-2 text-sm leading-6 text-gray-600">{f.a}</p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{f.a}</p>
               </details>
             ))}
           </div>

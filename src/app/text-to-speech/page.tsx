@@ -40,12 +40,12 @@ export default function TextToSpeechPage() {
         <div className="mx-auto max-w-6xl px-4 lg:flex lg:items-start lg:gap-12">
           <div className="lg:max-w-xl">
             <h1 className="text-4xl font-bold tracking-tight">AI Voice Clone Text to Speech</h1>
-            <p className="mt-4 text-lg leading-8 text-gray-600">
+            <p className="mt-4 text-lg leading-8 text-muted-foreground">
               Type text, hear your own voice. Paste a script, pick a language, download the
               file — works for articles, videos, podcasts and course narration.
             </p>
-            <div className="mt-8 text-sm leading-7 text-gray-700">
-              <h2 className="text-base font-bold text-gray-900">How it works</h2>
+            <div className="mt-8 text-sm leading-7 text-foreground/90">
+              <h2 className="text-base font-bold text-foreground">How it works</h2>
               <ol className="mt-2 list-decimal space-y-1 pl-5">
                 <li>Clone your voice once from 30 seconds of clean audio</li>
                 <li>Paste any text and pick one of {LANG_COUNT_LABEL} languages</li>
@@ -69,11 +69,11 @@ export default function TextToSpeechPage() {
       <section className="py-14">
         <div className="mx-auto max-w-3xl px-4">
           <h2 className="text-xl font-bold">FAQ</h2>
-          <div className="mt-4 divide-y divide-gray-100 rounded-xl border border-gray-100">
+          <div className="mt-4 divide-y divide-border/60 rounded-xl border border-border/60">
             {FAQ.map((f) => (
               <details key={f.q} className="p-4">
                 <summary className="cursor-pointer font-medium">{f.q}</summary>
-                <p className="mt-2 text-sm leading-6 text-gray-600">{f.a}</p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{f.a}</p>
               </details>
             ))}
           </div>

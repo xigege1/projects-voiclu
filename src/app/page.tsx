@@ -37,21 +37,22 @@ export default function HomePage() {
     <div>
       {/* 1. H1 + 副标题：首屏不谈价格，谈结果 */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_0%,var(--brand-soft),transparent)]" />
+        <div className="hero-glow absolute inset-0 -z-10" />
         <div className="container-gutter mx-auto max-w-6xl py-16 sm:py-24 lg:flex lg:items-center lg:gap-14">
           <div className="lg:max-w-xl">
-            <Badge variant="secondary" className="mb-5">
+            <Badge variant="secondary" className="mb-5 border-border/60 bg-card/60">
               <Check className="size-3.5" /> Clone once, dub everything
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              AI Voice Cloning
+              AI Voice Cloning,{" "}
+              <span className="text-gradient">your voice in any language</span>
             </h1>
             <p className="mt-5 text-lg leading-8 text-muted-foreground">
               30 seconds of audio → your voice speaking {LANG_COUNT_LABEL} languages.
               Clone once, dub everything, never re-record.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="btn-primary">
                 <Link href="/#clone">
                   Clone your voice <ArrowRight className="size-4" />
                 </Link>

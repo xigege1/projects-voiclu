@@ -94,7 +94,7 @@ export default function BestPage() {
     <div>
       <section className="bg-[var(--brand-soft)] py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight">Best AI Voice Clone Tools</h1>
-        <p className="mx-auto mt-3 max-w-xl text-gray-600">
+        <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
           Tested on the same sample, scored on the same criteria, ranked honestly — including
           where our own tool loses.
         </p>
@@ -102,7 +102,7 @@ export default function BestPage() {
 
       <article className="mx-auto max-w-4xl px-4 py-12">
         <h2 className="text-xl font-bold">How we tested</h2>
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm leading-7 text-gray-700">
+        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm leading-7 text-foreground/90">
           <li>Same 45-second clean voice sample uploaded to every tool</li>
           <li>Same 60-word English script and the same Portuguese translation</li>
           <li>Scored on: similarity, natural pacing, language coverage, price per finished minute, free-tier limit, commercial license terms</li>
@@ -113,7 +113,7 @@ export default function BestPage() {
         <div className="mt-4 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-200 text-gray-500">
+              <tr className="border-b border-border text-muted-foreground">
                 <th className="py-2 pr-3">Tool</th>
                 <th className="py-2 pr-3">Free tier</th>
                 <th className="py-2 pr-3">Entry price</th>
@@ -122,7 +122,7 @@ export default function BestPage() {
                 <th className="py-2">Our note</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 align-top">
+            <tbody className="divide-y divide-border/60 align-top">
               {TOOLS.map((t) => (
                 <tr key={t.name}>
                   <td className="py-3 pr-3 font-semibold">{t.name}</td>
@@ -130,7 +130,7 @@ export default function BestPage() {
                   <td className="py-3 pr-3">{t.price}</td>
                   <td className="py-3 pr-3">{t.langs}</td>
                   <td className="py-3 pr-3">{t.license}</td>
-                  <td className="py-3 text-gray-600">{t.note}</td>
+                  <td className="py-3 text-muted-foreground">{t.note}</td>
                 </tr>
               ))}
             </tbody>
@@ -138,7 +138,7 @@ export default function BestPage() {
         </div>
 
         <h2 className="mt-10 text-xl font-bold">Which one should you pick</h2>
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm leading-7 text-gray-700">
+        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm leading-7 text-foreground/90">
           <li>If you need the cheapest finished minute → [实测填写]</li>
           <li>If you need the widest language coverage → [实测填写]</li>
           <li>
@@ -150,7 +150,7 @@ export default function BestPage() {
         </ul>
 
         <h2 className="mt-10 text-xl font-bold">What we do not like about our own tool</h2>
-        <div className="mt-3 grid gap-4 text-sm leading-7 text-gray-700 sm:grid-cols-2">
+        <div className="mt-3 grid gap-4 text-sm leading-7 text-foreground/90 sm:grid-cols-2">
           <p>
             A long-form audiobook at scale is cheaper elsewhere — if you produce 40+ hours a
             month, per-character pricing at volume beats our flat fee.
@@ -161,7 +161,7 @@ export default function BestPage() {
           </p>
         </div>
 
-        <p className="mt-10 text-sm text-gray-500">
+        <p className="mt-10 text-sm text-muted-foreground">
           Comparing against the market leader specifically? See{" "}
           <Link href="/alternatives" className="text-[var(--brand)] underline">ElevenLabs alternatives</Link>.
         </p>

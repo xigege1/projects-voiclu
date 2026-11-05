@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-gray-700">
-      <h1 className="text-3xl font-bold text-gray-900">Privacy Policy</h1>
-      <p className="mt-2 text-xs text-gray-400">Last updated: {LEGAL_UPDATED}</p>
+    <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-foreground/90">
+      <h1 className="text-3xl font-bold text-foreground">Privacy Policy</h1>
+      <p className="mt-2 text-xs text-muted-foreground/70">Last updated: {LEGAL_UPDATED}</p>
 
       <div className="mt-8 space-y-8">
         <section>
-          <h2 className="text-base font-bold text-gray-900">What we collect</h2>
+          <h2 className="text-base font-bold text-foreground">What we collect</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>Your email address (login codes only — we never ask for a password)</li>
             <li>Voice samples you upload, and the audio we generate from them</li>
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">Audio samples — how long we keep them</h2>
+          <h2 className="text-base font-bold text-foreground">Audio samples — how long we keep them</h2>
           <p className="mt-2">
             For the lifetime of your account, and deleted within 30 days after you delete your
             account. We keep a subset of samples beyond that only when required to handle an
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">Who processes your data</h2>
+          <h2 className="text-base font-bold text-foreground">Who processes your data</h2>
           <p className="mt-2">
             To clone a voice and generate speech, your sample and text are sent to a
             third-party TTS provider (currently ElevenLabs). This is required for the service to
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">Your rights (GDPR, LGPD and friends)</h2>
+          <h2 className="text-base font-bold text-foreground">Your rights (GDPR, LGPD and friends)</h2>
           <p className="mt-2">
             You can request a copy of your data, correct it, or have it deleted. Brazil&apos;s
             LGPD gives you the same rights, and Brazilian users are covered by the same process.
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">Cookies</h2>
+          <h2 className="text-base font-bold text-foreground">Cookies</h2>
           <p className="mt-2">
             We set one cookie to remember your free-tier usage and, if you sign in, your
             session. Analytics run on [Umami / GA4 — 上线前定], which uses a single first-party
@@ -67,14 +67,14 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-bold text-gray-900">Children</h2>
+          <h2 className="text-base font-bold text-foreground">Children</h2>
           <p className="mt-2">
             The service is not for anyone under 16, and we do not knowingly collect their data.
             We do not process voice samples of minors.
           </p>
         </section>
 
-        <p className="text-gray-500">Contact: <a className="text-[var(--brand)] underline" href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a></p>
+        <p className="text-muted-foreground">Contact: <a className="text-[var(--brand)] underline" href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a></p>
       </div>
     </div>
   );

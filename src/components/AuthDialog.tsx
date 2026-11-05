@@ -76,11 +76,11 @@ export default function AuthDialog({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold">Sign in to Voiclu</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           {sent
             ? `We sent a code to ${email}. It expires in 10 minutes.`
             : "Email code only — no passwords, nothing to reset."}
@@ -93,7 +93,7 @@ export default function AuthDialog({
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-4 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-[var(--brand)]"
+              className="mt-4 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
             />
             <button
               onClick={requestCode}
@@ -110,7 +110,7 @@ export default function AuthDialog({
               placeholder="Code from email"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="mt-4 w-full rounded-lg border border-gray-200 px-3 py-2 text-center text-lg tracking-widest outline-none focus:border-[var(--brand)]"
+              className="mt-4 w-full rounded-lg border border-border bg-transparent px-3 py-2 text-center text-lg tracking-widest text-foreground outline-none focus:border-primary"
             />
             <button
               onClick={verify}
@@ -122,8 +122,8 @@ export default function AuthDialog({
           </>
         )}
 
-        {err && <p className="mt-2 text-sm text-red-600">{err}</p>}
-        <button onClick={onClose} className="mt-4 w-full text-center text-xs text-gray-400 hover:text-gray-600">
+        {err && <p className="mt-2 text-sm text-destructive">{err}</p>}
+        <button onClick={onClose} className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-foreground">
           Close
         </button>
       </div>
