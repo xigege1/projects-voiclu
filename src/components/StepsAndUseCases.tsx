@@ -44,17 +44,18 @@ export default function StepsAndUseCases() {
       {/* 三步说明：H1 后需要 H2 承接，避免 H1 → H3 跳级 */}
       <section className="section-pad">
         <div className="container-gutter mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            How it works
-          </h2>
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <h2 className="section-title">How it works</h2>
+          <p className="section-lead">
+            Three steps from a short recording to a finished dub — no studio, no re-recording.
+          </p>
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
             {STEPS.map((s) => (
-              <Card key={s.n} className="items-start p-6">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--grad-from)] via-[var(--grad-mid)] to-[var(--grad-to)] font-bold text-white">
+              <Card key={s.n} className="items-start p-7">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-sm font-semibold text-[var(--brand-light)] ring-1 ring-primary/25">
                   {s.n}
                 </div>
-                <CardTitle className="mt-4 text-base">{s.title}</CardTitle>
-                <CardContent className="px-0 text-sm leading-6 text-muted-foreground">
+                <CardTitle className="mt-5 text-lg">{s.title}</CardTitle>
+                <CardContent className="px-0 text-[15px] leading-7 text-muted-foreground">
                   {s.desc}
                 </CardContent>
               </Card>
@@ -63,17 +64,18 @@ export default function StepsAndUseCases() {
         </div>
       </section>
 
-      {/* 使用场景：标题扩成可读段落（首页正文量的主要来源） */}
-      <section className="section-pad bg-[var(--brand-soft)]">
-        <div className="container-gutter mx-auto max-w-6xl">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            What people build with it
-          </h2>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 使用场景：两列宽卡，正文不再被挤成 15 字一行 */}
+      <section className="section-pad border-t border-border/60">
+        <div className="container-gutter mx-auto max-w-5xl">
+          <h2 className="section-title">What people build with it</h2>
+          <p className="section-lead">
+            One voice, reused everywhere — the part that used to cost weeks of studio time.
+          </p>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2">
             {USE_CASES.map((u) => (
-              <Card key={u.title} className="items-start p-6">
-                <CardTitle className="text-base">{u.title}</CardTitle>
-                <CardContent className="px-0 text-sm leading-6 text-muted-foreground">
+              <Card key={u.title} className="items-start p-7">
+                <CardTitle className="text-lg">{u.title}</CardTitle>
+                <CardContent className="px-0 text-[15px] leading-7 text-muted-foreground">
                   {u.body}
                 </CardContent>
               </Card>

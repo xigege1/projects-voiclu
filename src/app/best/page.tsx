@@ -92,7 +92,7 @@ const TOOLS: {
 export default function BestPage() {
   return (
     <div>
-      <section className="bg-[var(--brand-soft)] py-14 text-center">
+      <section className="border-b border-border/60 py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight">Best AI Voice Clone Tools</h1>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
           Tested on the same sample, scored on the same criteria, ranked honestly — including

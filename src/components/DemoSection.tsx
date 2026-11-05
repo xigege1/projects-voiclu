@@ -5,10 +5,12 @@
  * 免费流量再多也不产生 API 成本（方案 D3）。
  *
  * 上线前动作：用真实账号跑一次克隆 + 6 条合成，把 mp3 放进 public/demo/。
- * 文件名约定：original-<n>.mp3 / clone-<lang>-<n>.mp3。放好后本区自动可播。
- * 音频缺失时降级为占位提示，结构不动，补文件即恢复。
+ * 文件名约定：original-<n>.mp3 / clone-<lang>-<n>.mp3。放好后本区自动出现播放器，
+ * 文件缺失时只显示语言标签，不再渲染一排灰秃秃的空 audio 控件。
  */
 
+import fs from "node:fs";
+import path from "node:path";
 import { Card } from "@/components/ui/card";
 
 type Pair = {
@@ -35,57 +37,74 @@ const EMOTION_PAIRS: Pair[] = [
   { id: "calm", lang: "Calm", tag: "Same voice, calm delivery", original: "original-2.mp3", clone: "clone-calm-2.mp3" },
 ];
 
-function PairPlayer({ p, fallback }: { p: Pair; fallback: string }) {
+const DEMO_DIR = path.join(process.cwd(), "public", "demo");
+
+function audioReady(file: string) {
+  try {
+    return fs.existsSync(path.join(DEMO_DIR, file));
+  } catch {
+    return false;
+  }
+}
+
+function Player({ label, file }: { label: string; file: string }) {
   return (
-    <Card className="items-start p-5">
-      <div className="mb-1 text-sm font-semibold">{p.lang}</div>
-      <div className="mb-4 text-xs text-muted-foreground">{p.tag}</div>
-
-      <div className="grid w-full gap-3 sm:grid-cols-2">
-        <div>
-          <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Original</div>
-          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <audio controls preload="none" src={`/demo/${p.original}`} className="w-full" />
-        </div>
-        <div>
-          <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">Clone</div>
-          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <audio controls preload="none" src={`/demo/${p.clone}`} className="w-full" />
-        </div>
+    <div>
+      <div className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        {label}
       </div>
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+      <audio controls preload="none" src={`/demo/${file}`} className="w-full" />
+    </div>
+  );
+}
 
-      <p className="mt-3 text-xs text-muted-foreground">{fallback}</p>
+function PairPlayer({ p }: { p: Pair }) {
+  const ready = audioReady(p.original) && audioReady(p.clone);
+  return (
+    <Card className="items-start p-6">
+      <div className="text-base font-semibold">{p.lang}</div>
+      <div className="mt-1 text-sm text-muted-foreground">{p.tag}</div>
+
+      {ready ? (
+        <div className="mt-5 grid w-full gap-4 sm:grid-cols-2">
+          <Player label="Original" file={p.original} />
+          <Player label="Clone" file={p.clone} />
+        </div>
+      ) : (
+        <div className="mt-5 flex min-h-14 w-full items-center justify-center rounded-lg border border-dashed border-border/70 bg-background/40 px-4 text-center text-sm text-muted-foreground">
+          Sample audio coming soon
+        </div>
+      )}
     </Card>
   );
 }
 
 export default function DemoSection() {
   return (
-    <section className="section-pad bg-muted/40">
+    <section className="section-pad border-t border-border/60">
       <div className="container-gutter mx-auto max-w-6xl">
-        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
-          Hear the same voice in 6 languages
-        </h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-muted-foreground">
+        <h2 className="section-title">Hear the same voice in 6 languages</h2>
+        <p className="section-lead">
           The same sentence. The same voice. Only the language changes.
         </p>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {LANGUAGE_PAIRS.map((p) => (
-            <PairPlayer key={p.id} p={p} fallback="Demo audio coming soon." />
+            <PairPlayer key={p.id} p={p} />
           ))}
         </div>
 
-        <h3 className="mt-14 text-center text-xl font-semibold">
+        <h3 className="mt-16 text-center text-xl font-semibold tracking-tight">
           Not just a new language — a new delivery
         </h3>
-        <div className="mt-6 grid gap-5 md:grid-cols-3">
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
           {EMOTION_PAIRS.map((p) => (
-            <PairPlayer key={p.id} p={p} fallback="Demo audio coming soon." />
+            <PairPlayer key={p.id} p={p} />
           ))}
         </div>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
+        <p className="mt-8 text-center text-sm text-muted-foreground">
           All samples are pre-generated. No sign-up, just press play.
         </p>
       </div>

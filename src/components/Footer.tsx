@@ -3,7 +3,7 @@ import { SITE } from "@/lib/constants";
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-muted/40">
+    <footer className="border-t border-border/60">
       <div className="container-gutter mx-auto grid max-w-6xl gap-8 py-12 text-sm text-muted-foreground sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="font-semibold text-foreground">{SITE.name}</div>

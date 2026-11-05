@@ -14,26 +14,25 @@ import { cn } from "@/lib/utils";
 
 export default function PricingSection({ compact = false }: { compact?: boolean }) {
   return (
-    <section id="pricing" className={compact ? "" : "section-pad"}>
+    <section id="pricing" className={compact ? "" : "section-pad border-t border-border/60"}>
       <div className="container-gutter mx-auto max-w-6xl">
-        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">Simple pricing</h2>
-        <p className="mx-auto mt-3 max-w-2xl text-center text-muted-foreground">
+        <h2 className="section-title">Simple pricing</h2>
+        <p className="section-lead">
           Pay per character, never per minute of silence. 1,000 characters ≈ 1 minute of audio.
         </p>
-        <p className="mt-1 text-center text-sm text-muted-foreground">{ANNUAL_NOTE}</p>
+        <p className="mt-2 text-center text-sm text-muted-foreground">{ANNUAL_NOTE}</p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {PLANS.map((p) => (
             <Card
               key={p.id}
               className={cn(
-                "relative",
-                p.highlight &&
-                  "border-transparent shadow-lg shadow-primary/10 [background:linear-gradient(var(--card),var(--card))_padding-box,linear-gradient(90deg,var(--grad-from),var(--grad-mid),var(--grad-to))_border-box]"
+                "relative overflow-visible",
+                p.highlight && "border-primary/60 shadow-lg shadow-primary/10"
               )}
             >
               {p.highlight && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--grad-from)] via-[var(--grad-mid)] to-[var(--grad-to)] text-white">
+                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
                   Most popular
                 </Badge>
               )}
@@ -47,7 +46,7 @@ export default function PricingSection({ compact = false }: { compact?: boolean 
                 </div>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2.5 text-sm text-muted-foreground">
+                <ul className="space-y-3 text-[15px] leading-6 text-muted-foreground">
                   {p.features.map((f) => (
                     <li key={f} className="flex gap-2.5">
                       <Check className="mt-0.5 size-4 shrink-0 text-primary" />

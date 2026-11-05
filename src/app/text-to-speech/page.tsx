@@ -36,7 +36,7 @@ const FAQ = [
 export default function TextToSpeechPage() {
   return (
     <div>
-      <section className="bg-gradient-to-b from-[var(--brand-soft)] to-white py-14">
+      <section className="border-b border-border/60 py-14">
         <div className="mx-auto max-w-6xl px-4 lg:flex lg:items-start lg:gap-12">
           <div className="lg:max-w-xl">
             <h1 className="text-4xl font-bold tracking-tight">AI Voice Clone Text to Speech</h1>

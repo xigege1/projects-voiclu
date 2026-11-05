@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <div>
-      <section className="bg-[var(--brand-soft)] py-14 text-center">
+      <section className="border-b border-border/60 py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight">Pricing</h1>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
           One free generation to judge the quality. Then flat monthly pricing — your cost never
@@ -21,9 +21,10 @@ export default function PricingPage() {
 
       <PricingSection />
 
-      <section className="mx-auto max-w-3xl px-4 pb-16">
-        <h2 className="text-xl font-bold">Pricing questions</h2>
-        <div className="mt-4 divide-y divide-border/60 rounded-xl border border-border/60">
+      <section className="container-gutter mx-auto max-w-6xl pb-20">
+        <div className="max-w-3xl">
+        <h2 className="text-2xl font-semibold tracking-tight">Pricing questions</h2>
+        <div className="mt-5 divide-y divide-border/60 rounded-xl border border-border/60">
           {FAQ_HOME.filter((_, i) => [0, 2, 4, 7].includes(i)).map((f) => (
             <details key={f.q} className="p-4">
               <summary className="cursor-pointer font-medium">{f.q}</summary>
@@ -40,6 +41,7 @@ export default function PricingPage() {
               so the math is transparent.
             </p>
           </details>
+        </div>
         </div>
       </section>
     </div>

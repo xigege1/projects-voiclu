@@ -47,7 +47,7 @@ const USE_CASES = [
 export default function BrPage() {
   return (
     <div lang="pt-BR">
-      <section className="bg-gradient-to-b from-[var(--brand-soft)] to-white py-14">
+      <section className="border-b border-border/60 py-14">
         <div className="mx-auto max-w-6xl px-4 lg:flex lg:items-start lg:gap-12">
           <div className="lg:max-w-xl">
             <h1 className="text-4xl font-bold tracking-tight">Clonagem de Voz com IA</h1>
@@ -82,7 +82,7 @@ export default function BrPage() {
         </div>
       </section>
 
-      <section className="bg-muted/40 py-14">
+      <section className="border-y border-border/60 py-14">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-bold tracking-tight">Ouça antes de se cadastrar</h2>
           <p className="mt-2 text-muted-foreground">A mesma frase. A mesma voz. Idiomas diferentes.</p>

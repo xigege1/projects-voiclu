@@ -32,7 +32,7 @@ const ALTS = [
 export default function AlternativesPage() {
   return (
     <div>
-      <section className="bg-[var(--brand-soft)] py-14 text-center">
+      <section className="border-b border-border/60 py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight">ElevenLabs Alternatives</h1>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
           11 options compared on price per minute, cloning quality, language support and
@@ -56,7 +56,7 @@ export default function AlternativesPage() {
               <h2 className="text-lg font-bold">
                 {a.name} — best for {a.best}
                 {a.ours && (
-                  <span className="ml-2 rounded-full bg-[var(--brand-soft)] px-2 py-0.5 text-xs font-medium text-[var(--brand)]">
+                  <span className="ml-2 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-primary">
                     our product
                   </span>
                 )}
@@ -73,7 +73,7 @@ export default function AlternativesPage() {
           ))}
         </div>
 
-        <section className="mt-12 rounded-2xl bg-[var(--brand-soft)] p-6">
+        <section className="mt-12 rounded-2xl border border-border/60 bg-card p-6">
           <h2 className="text-lg font-bold">If you are cloning your own voice for dubbing</h2>
           <p className="mt-2 text-sm leading-7 text-foreground/90">
             Voiclu is built for that one job: clone once from 30 seconds of audio, then output

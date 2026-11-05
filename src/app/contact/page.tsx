@@ -52,7 +52,7 @@ export default function ContactPage() {
         right queue.
       </p>
 
-      <p className="mt-6 rounded-xl bg-[var(--brand-soft)] px-4 py-3">
+      <p className="mt-6 rounded-xl border border-border/60 bg-card px-4 py-3">
         <span className="font-semibold text-foreground">Email:</span>{" "}
         <a href={`mailto:${SITE.supportEmail}`} className="font-medium text-[var(--brand)] underline">
           {SITE.supportEmail}
@@ -74,7 +74,7 @@ export default function ContactPage() {
             <p className="mt-3 text-xs text-muted-foreground/70">{c.sla}</p>
             <a
               href={mailto(c.subject)}
-              className="mt-3 inline-block rounded-lg bg-[var(--brand)] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5b21b6]"
+              className="mt-3 inline-block rounded-lg bg-[var(--brand)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--brand-strong)]"
             >
               Email about this
             </a>

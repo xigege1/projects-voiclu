@@ -32,15 +32,15 @@ const FREE_FAQ = [
 export default function FreePage() {
   return (
     <div>
-      <section className="bg-gradient-to-b from-[var(--brand-soft)] to-white py-14">
-        <div className="mx-auto max-w-6xl px-4 lg:flex lg:items-start lg:gap-12">
+      <section className="border-b border-border/60 py-14">
+        <div className="container-gutter mx-auto max-w-6xl lg:flex lg:items-start lg:gap-14">
           <div className="lg:max-w-xl">
-            <h1 className="text-4xl font-bold tracking-tight">Free AI Voice Cloning</h1>
+            <h1 className="text-4xl font-bold leading-tight tracking-tight">Free AI Voice Cloning</h1>
             <p className="mt-4 text-lg leading-8 text-muted-foreground">
               One free generation, no sign-up, no credit card. Hear your own voice speak{" "}
               {LANG_COUNT_LABEL} languages in about 3 minutes.
             </p>
-            <div className="mt-8 space-y-8 text-sm leading-7 text-foreground/90">
+            <div className="mt-8 space-y-8 text-[15px] leading-7 text-foreground/90">
               <div>
                 <h2 className="mb-2 text-base font-bold text-foreground">What you get for free</h2>
                 <ul className="list-disc space-y-1 pl-5">
@@ -74,10 +74,11 @@ export default function FreePage() {
       </section>
 
       <section className="py-14">
-        <div className="mx-auto max-w-3xl px-4">
-          <h2 className="text-xl font-bold">Free vs paid</h2>
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[480px] text-left text-sm">
+        <div className="container-gutter mx-auto max-w-6xl">
+          <div className="max-w-3xl">
+          <h2 className="text-2xl font-semibold tracking-tight">Free vs paid</h2>
+          <div className="mt-5 overflow-x-auto">
+            <table className="w-full min-w-[480px] text-left text-[15px]">
               <thead>
                 <tr className="border-b border-border text-muted-foreground">
                   <th className="py-2"> </th>
@@ -122,11 +123,11 @@ export default function FreePage() {
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
             Full details on the{" "}
-            <Link href="/pricing" className="text-[var(--brand)] underline">pricing page</Link>.
+            <Link href="/pricing" className="text-primary underline">pricing page</Link>.
             One-time $49 pack and annual plans are also available there.
           </p>
 
-          <h2 className="mt-12 text-xl font-bold">FAQ</h2>
+          <h2 className="mt-12 text-2xl font-semibold tracking-tight">FAQ</h2>
           <div className="mt-4 divide-y divide-border/60 rounded-xl border border-border/60">
             {FREE_FAQ.map((f) => (
               <details key={f.q} className="p-4">
@@ -136,6 +137,7 @@ export default function FreePage() {
             ))}
           </div>
           <FaqJsonLd items={FREE_FAQ} />
+          </div>
         </div>
       </section>
     </div>

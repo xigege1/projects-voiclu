@@ -17,12 +17,12 @@ const COMPARISON = [
 
 export default function ExplainSection() {
   return (
-    <section className="section-pad">
+    <section className="section-pad border-t border-border/60">
       <div className="container-gutter mx-auto max-w-6xl">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* 左：正文 */}
           <div>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               What is AI voice cloning?
             </h2>
             <div className="mt-5 space-y-4 text-base leading-7 text-muted-foreground">
@@ -56,7 +56,7 @@ export default function ExplainSection() {
 
           {/* 右：5 行对比表 */}
           <div>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
               Voiclu vs ElevenLabs
             </h2>
             <div className="mt-5 overflow-hidden rounded-xl border bg-card">

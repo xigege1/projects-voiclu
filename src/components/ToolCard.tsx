@@ -179,7 +179,7 @@ export default function ToolCard() {
   }
 
   return (
-    <div id="clone" className="rounded-xl border bg-card p-5 shadow-sm sm:p-6">
+    <div id="clone" className="rounded-2xl border border-border/70 bg-card p-6 shadow-xl shadow-black/10 sm:p-7">
       {/* tabs */}
       <div className="mb-5 flex rounded-xl bg-muted p-1 text-sm font-medium">
         <button
@@ -204,9 +204,9 @@ export default function ToolCard() {
               e.preventDefault();
               onFile(e.dataTransfer.files?.[0] ?? null);
             }}
-            className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border px-4 py-8 text-center"
+            className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border/80 px-4 py-9 text-center"
           >
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[15px] text-muted-foreground">
               Drag clean audio here, or{" "}
               <label className="cursor-pointer font-semibold text-primary underline">
                 browse
@@ -218,7 +218,7 @@ export default function ToolCard() {
                 />
               </label>
             </p>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-2 text-[13px] leading-5 text-muted-foreground">
               30 sec – 3 min · voice only, no music or noise · mp3 / wav / m4a
             </p>
             {file && (
@@ -230,14 +230,14 @@ export default function ToolCard() {
 
           <button
             onClick={toggleRecord}
-            className={`mt-3 w-full rounded-lg border py-2 text-sm font-medium ${
+            className={`mt-3 flex h-10 w-full items-center justify-center rounded-lg border text-sm font-medium ${
               recording ? "border-destructive/40 bg-destructive/10 text-destructive" : "border-border text-muted-foreground"
             }`}
           >
             {recording ? "■ Stop recording" : "● Record in browser"}
           </button>
 
-          <label className="mt-4 flex cursor-pointer items-start gap-2 text-xs leading-5 text-muted-foreground">
+          <label className="mt-4 flex cursor-pointer items-start gap-2 text-[13px] leading-5 text-muted-foreground">
             <input
               type="checkbox"
               checked={consent}
@@ -261,7 +261,7 @@ export default function ToolCard() {
       ) : (
         <div>
           {demoMode && (
-            <p className="mb-3 rounded-lg bg-amber-500/10 px-3 py-2 text-[11px] leading-5 text-amber-600 dark:text-amber-400">
+            <p className="mb-3 rounded-lg bg-amber-500/10 px-3 py-2 text-xs leading-5 text-amber-600 dark:text-amber-400">
               <strong>Demo mode.</strong> Voice cloning isn&apos;t active on this server — a stock voice
               stands in for your clone so you can test the whole flow. Text to Speech is fully live.
             </p>
@@ -272,7 +272,7 @@ export default function ToolCard() {
             placeholder="Type what your cloned voice should say…"
             rows={5}
             maxLength={10000}
-            className="w-full rounded-xl border border-border bg-transparent p-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+            className="w-full rounded-xl border border-border bg-transparent p-3 text-[15px] leading-6 text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
           />
           <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
             <span>Free run: up to 150 characters (~30s)</span>
@@ -283,7 +283,7 @@ export default function ToolCard() {
             <select
               value={lang}
               onChange={(e) => setLang(e.target.value)}
-              className="rounded-lg border border-border bg-transparent px-3 py-2 text-sm text-foreground"
+              className="h-10 rounded-lg border border-border bg-transparent px-3 text-sm text-foreground"
             >
               {LANGS.map((l) => (
                 <option key={l.value} value={l.value} className="bg-card text-foreground">{l.label}</option>
@@ -300,8 +300,8 @@ export default function ToolCard() {
         </div>
       )}
 
-      {stage && !err && <p className="mt-3 text-center text-xs text-muted-foreground">{stage}</p>}
-      {err && <p className="mt-3 text-center text-xs text-destructive">{err}</p>}
+      {stage && !err && <p className="mt-3 text-center text-[13px] text-muted-foreground">{stage}</p>}
+      {err && <p className="mt-3 text-center text-[13px] text-destructive">{err}</p>}
 
       {audioUrl && (
         <div className="mt-4 rounded-xl bg-muted p-3">
@@ -316,7 +316,7 @@ export default function ToolCard() {
         </div>
       )}
 
-      <p className="mt-3 text-center text-[11px] text-muted-foreground">
+      <p className="mt-4 text-center text-xs leading-5 text-muted-foreground">
         No credit card for your free run · Sign in only to keep your voice profile ·{" "}
         <button onClick={() => setAuthOpen(true)} className="underline">Sign in</button>
       </p>
