@@ -8,7 +8,7 @@
  * 否则付费用户重新登录会被清零额度。
  */
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin, getSupabaseAuth } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   const { access_token } = (await req.json()) as { access_token?: string };
@@ -16,14 +16,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "token_required" }, { status: 400 });
   }
 
-  const db = getSupabaseAdmin();
-  const { data, error } = await db.auth.getUser(access_token);
+  // 校验 token 用认证客户端，避免把用户身份带到数据客户端上
+  const auth = getSupabaseAuth();
+  const { data, error } = await auth.auth.getUser(access_token);
   const user = data?.user;
 
   if (error || !user || !user.email) {
     return NextResponse.json({ error: "invalid_token" }, { status: 401 });
   }
 
+  const db = getSupabaseAdmin();
   const { error: upErr } = await db.from("users").upsert(
     { id: user.id, email: user.email, plan: "free", credits_left: 0 },
     { onConflict: "id", ignoreDuplicates: true }

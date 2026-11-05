@@ -4,7 +4,7 @@
  * 生产前在 Supabase Auth 设置里限制发送频率（默认已有）。
  */
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAuth } from "@/lib/supabase";
 
 
 export async function POST(req: Request) {
@@ -13,8 +13,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid_email" }, { status: 400 });
   }
 
-  const db = getSupabaseAdmin();
-  const { error } = await db.auth.signInWithOtp({
+  const auth = getSupabaseAuth();
+  const { error } = await auth.auth.signInWithOtp({
     email,
     options: { shouldCreateUser: true },
   });

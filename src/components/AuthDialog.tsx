@@ -32,7 +32,15 @@ export default function AuthDialog({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      if (!res.ok) throw new Error((await res.json()).message ?? "Failed to send code");
+      if (!res.ok) {
+        const msg: string = (await res.json()).message ?? "Failed to send code";
+        // Supabase 有 20 秒频控，原文对用户不友好，换成人话
+        throw new Error(
+          /only request this after/i.test(msg)
+            ? "Please wait a few seconds before requesting another code."
+            : msg
+        );
+      }
       setSent(true);
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Something went wrong");
@@ -74,7 +82,7 @@ export default function AuthDialog({
         <h2 className="text-lg font-bold">Sign in to Voiclu</h2>
         <p className="mt-1 text-sm text-gray-500">
           {sent
-            ? `We sent a 6-digit code to ${email}. It expires in 10 minutes.`
+            ? `We sent a code to ${email}. It expires in 10 minutes.`
             : "Email code only — no passwords, nothing to reset."}
         </p>
 
@@ -99,7 +107,7 @@ export default function AuthDialog({
           <>
             <input
               inputMode="numeric"
-              placeholder="6-digit code"
+              placeholder="Code from email"
               value={code}
               onChange={(e) => setCode(e.target.value)}
               className="mt-4 w-full rounded-lg border border-gray-200 px-3 py-2 text-center text-lg tracking-widest outline-none focus:border-[var(--brand)]"
