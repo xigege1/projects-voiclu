@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import HashAuth from "@/components/HashAuth";
 import { SITE } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <script defer src={umamiSrc} data-website-id={umamiId} />
         )}
         <Nav />
+        <HashAuth />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

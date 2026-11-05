@@ -24,10 +24,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid_code", message: "Wrong or expired code." }, { status: 401 });
   }
 
-  // 首次登录建业务行（幂等）
+  // 首次登录建业务行。ignoreDuplicates 保证已存在的行不被覆盖，
+  // 否则付费用户每次重新登录都会被重置成 credits_left = 0（等于白送额度）。
   await db.from("users").upsert(
     { id: data.user.id, email, plan: "free", credits_left: 0 },
-    { onConflict: "id" }
+    { onConflict: "id", ignoreDuplicates: true }
   );
 
   return NextResponse.json({
