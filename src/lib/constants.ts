@@ -11,6 +11,13 @@ export const SITE = {
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "support@voiclu.com",
 };
 
+/**
+ * 内容最后更新日（手动维护，改文案/加页面时更新这里）
+ * 不要用 new Date()：sitemap 的 lastmod 每次请求都变成"现在"，
+ * 等于告诉 Google 全站每秒都在变，lastmod 会被判定不可靠而忽略。
+ */
+export const CONTENT_UPDATED = "2026-11-05";
+
 export const LANG_COUNT = 75;
 export const LANG_COUNT_LABEL = "75+";
 
