@@ -13,7 +13,16 @@ import { resolveIdentity } from "@/lib/identity";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { synthesize } from "@/lib/elevenlabs";
 import { putAudio, audioKey } from "@/lib/storage";
-import { cacheKey, findCachedJob, checkAndReserveFree, recordGeneration, QuotaError } from "@/lib/billing";
+import {
+  cacheKey,
+  findCachedJob,
+  checkAndReserveFree,
+  recordGeneration,
+  getPlanInfo,
+  isPaidPlan,
+  chargeCredits,
+  QuotaError,
+} from "@/lib/billing";
 import { sendFreeGenerationDone } from "@/lib/emails";
 
 
@@ -66,26 +75,54 @@ export async function POST(req: Request) {
       return NextResponse.json({ audioUrl: cachedUrl, cached: true });
     }
 
-    // ---- 闸 1：额度（登录用户按 plan 扣字符；匿名/免费用户 1 次） ----
-    // TODO(付费): 登录且 plan != free 时，走 credits_left 扣减而不是 checkAndReserveFree
-    let charged = false;
-    try {
-      await checkAndReserveFree(identity, text);
-      charged = true; // 免费额度也算"收费"口径：占用 1 次免费机会
-    } catch (e) {
-      if (e instanceof QuotaError) {
+    // ---- 闸 1：额度 ----
+    // 付费用户（starter / creator / onetime）走 credits_left 扣字符；
+    // 免费与匿名用户走「每身份 1 次」。
+    // 之前这里只有免费闸，付费用户生成第二次就被 402 拦住 —— 付了钱也用不了。
+    const planInfo = identity.authed ? await getPlanInfo(identity.userId) : null;
+    const paid = isPaidPlan(planInfo?.plan);
+    const bucket: "free" | "credits" = paid ? "credits" : "free";
+
+    if (paid) {
+      const left = planInfo?.creditsLeft ?? 0;
+      if (left < text.length) {
         return NextResponse.json(
-          { error: "quota_exceeded", reason: e.reason, message: e.message, upgradeUrl: "/pricing" },
+          {
+            error: "quota_exceeded",
+            reason: "credits_exceeded",
+            message: `This request needs ${text.length} characters but you have ${left} left.`,
+            creditsLeft: left,
+            upgradeUrl: "/pricing",
+          },
           { status: 402 }
         );
       }
-      throw e;
+      // 不预扣：生成成功后才真正扣（见下），失败不扣钱
+    } else {
+      try {
+        await checkAndReserveFree(identity, text);
+      } catch (e) {
+        if (e instanceof QuotaError) {
+          return NextResponse.json(
+            { error: "quota_exceeded", reason: e.reason, message: e.message, upgradeUrl: "/pricing" },
+            { status: 402 }
+          );
+        }
+        throw e;
+      }
     }
 
     // ---- 闸 3：真调 API 才花钱 ----
     const audio = await synthesize(voice.provider_voice_id, text);
     // 文件名带 AI-generated 标记（合规：生成音频可识别）
     const url = await putAudio(audioKey("voiclu-AI-generated"), audio, "audio/mpeg");
+
+    // 音频已经生成（钱已花），这一步扣额度。CAS 失败会抛错让用户重试，
+    // 不会出现「扣成负数」或「白送一次」。
+    let creditsLeft: number | undefined;
+    if (bucket === "credits") {
+      creditsLeft = await chargeCredits(identity.userId, text.length);
+    }
 
     await recordGeneration({
       identity,
@@ -95,12 +132,13 @@ export async function POST(req: Request) {
       chars: text.length,
       audioUrl: url,
       apiCalled: true,
-      charged,
+      charged: true,
+      bucket,
     });
 
     // 转化邮件（day1 邮件 2）：登录用户第一次免费生成成功后发。
-    // 匿名用户没有邮箱，转化靠页面付费弹窗 —— 不阻塞响应，失败只记日志。
-    if (identity.authed && charged) {
+    // 付费用户已经在付钱，不再推销 —— 只给 free 桶发。
+    if (identity.authed && bucket === "free") {
       void (async () => {
         try {
           const { data: user } = await db.from("users").select("email").eq("id", identity.userId).maybeSingle();
@@ -113,7 +151,7 @@ export async function POST(req: Request) {
       })();
     }
 
-    return NextResponse.json({ audioUrl: url, cached: false });
+    return NextResponse.json({ audioUrl: url, cached: false, creditsLeft });
   } catch (e) {
     console.error("[/api/tts]", e);
     return NextResponse.json(

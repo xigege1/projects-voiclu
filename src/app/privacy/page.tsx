@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE } from "@/lib/constants";
+import { SITE, LEGAL_UPDATED } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Voiclu",
@@ -10,7 +10,7 @@ export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-gray-700">
       <h1 className="text-3xl font-bold text-gray-900">Privacy Policy</h1>
-      <p className="mt-2 text-xs text-gray-400">Last updated: [上线日期]</p>
+      <p className="mt-2 text-xs text-gray-400">Last updated: {LEGAL_UPDATED}</p>
 
       <div className="mt-8 space-y-8">
         <section>

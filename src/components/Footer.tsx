@@ -33,13 +33,12 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <div className="mb-2 font-semibold text-gray-900">Contact</div>
+          <div className="mb-2 font-semibold text-gray-900">Company</div>
           <ul className="space-y-1.5">
+            <li><Link className="hover:text-gray-900" href="/about">About</Link></li>
+            <li><Link className="hover:text-gray-900" href="/contact">Contact</Link></li>
             <li><a className="hover:text-gray-900" href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a></li>
-            <li>
-              {/* 第 3~4 周启用 /br 后打开；与英文页互链是 hreflang 生效的关键 */}
-              <Link className="hover:text-gray-900" href="/br">Português (Brasil)</Link>
-            </li>
+            <li><Link className="hover:text-gray-900" href="/br">Português (Brasil)</Link></li>
           </ul>
         </div>
       </div>

@@ -18,6 +18,20 @@ export const SITE = {
  */
 export const CONTENT_UPDATED = "2026-11-05";
 
+/**
+ * 条款适用法域 + 政策更新时间。
+ *
+ * GOVERNING_LAW 默认 Singapore（SaaS 出海最常见的注册地，Creem / Paddle 都支持）。
+ * ⚠️ 上线收款前必须按实际经营主体确认：
+ *   - 新加坡公司 → "Singapore"
+ *   - 美国主体   → "the State of Delaware, United States"
+ * 改这里或用环境变量 NEXT_PUBLIC_GOVERNING_LAW 覆盖，改完要重新部署（页面是静态预渲染）。
+ */
+export const GOVERNING_LAW = process.env.NEXT_PUBLIC_GOVERNING_LAW || "Singapore";
+
+/** 法务页显示用（sitemap 用的 CONTENT_UPDATED 是机器口径，这个是给人看的） */
+export const LEGAL_UPDATED = "November 5, 2026";
+
 export const LANG_COUNT = 75;
 export const LANG_COUNT_LABEL = "75+";
 

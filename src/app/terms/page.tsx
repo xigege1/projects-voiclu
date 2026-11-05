@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE } from "@/lib/constants";
+import { SITE, LEGAL_UPDATED, GOVERNING_LAW } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Terms of Service — Voiclu",
@@ -10,7 +10,7 @@ export default function TermsPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 text-sm leading-7 text-gray-700">
       <h1 className="text-3xl font-bold text-gray-900">Terms of Service</h1>
-      <p className="mt-2 text-xs text-gray-400">Last updated: [上线日期]</p>
+      <p className="mt-2 text-xs text-gray-400">Last updated: {LEGAL_UPDATED}</p>
 
       <div className="mt-8 space-y-8">
         <section>
@@ -85,7 +85,8 @@ export default function TermsPage() {
         <section>
           <h2 className="text-base font-bold text-gray-900">8. Governing law</h2>
           <p className="mt-2">
-            These terms are governed by the laws of [选择一个司法辖区：新加坡或美国某州 — 上线前定]. Disputes go to the courts of that jurisdiction.
+            These terms are governed by the laws of {GOVERNING_LAW}. Disputes go to the courts of
+            that jurisdiction.
           </p>
         </section>
 

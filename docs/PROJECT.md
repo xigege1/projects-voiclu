@@ -181,7 +181,7 @@ cacheKey = sha256(provider_voice_id | lang | text)
 
 ### 3.6 SEO
 
-- `sitemap.xml`：**当前 6 条**（`/`、`/free`、`/best`、`/alternatives`、`/text-to-speech`、`/pricing`）。**待补 6 条**：`/terms`、`/refund`、`/privacy`、`/voice-removal`、`/about`、`/contact`；`/br` 启用后再加
+- `sitemap.xml`：**13 条**（2026-11-06 从 6 条补齐）。核心页 `/`、`/pricing`、`/free`（1 / 0.9）；内容页 `/alternatives`、`/best`、`/text-to-speech`（0.8）；语言副本 `/br`（0.7）；公司页 `/about`、`/contact`（0.5）；法务页 `/privacy`、`/terms`、`/refund`、`/voice-removal`（0.3）
 - `robots.txt`：允许全站，屏蔽 `/api/`，带 `Sitemap:` 行
 - 每页独立 Title / Description / H1，H1 只出现一次
 - 首页 8 条 + `/free` 4 条 **FAQPage JSON-LD**
@@ -242,6 +242,7 @@ cacheKey = sha256(provider_voice_id | lang | text)
 - ✅ Supabase 邮箱验证码登录 + 数据库计数额度
 - ✅ 首页 8 模块 + 工具卡（上传/录制双模式 + 转码 + 时长检测）
 - ✅ 5 个英文页 + 法务四页 + `/br` 葡语页
+- ✅ `/about`、`/contact` 补齐（2026-11-06）
 - ✅ sitemap / robots / canonical / FAQ JSON-LD / OG 元数据
 - ✅ 5 封邮件模板（Resend，无 key 静默跳过）
 - ✅ `scripts/push-env.sh` 批量推环境变量
@@ -259,17 +260,25 @@ cacheKey = sha256(provider_voice_id | lang | text)
 
 #### P0 · 挡住收入的六件事（2026-11-05 两份外部审阅后重排）
 
-| # | 事项 | 为什么是 P0 | 依赖 |
+| # | 事项 | 为什么是 P0 | 状态 |
 |---|---|---|---|
-| P0-1 | **修 `/api/tts` 付费扣减**：登录且 `plan != free` 走 `credits_left`，不再走 `checkAndReserveFree` | 现在付费用户生成第二次就被 402 拦住——渠道通了也用不了 | 无，**可立即做** |
-| P0-2 | **确认收款主体**（大陆 / 香港 / 美国）→ 据此定渠道顺序 | 决定后面所有支付工作，主体不定就接支付等于白写代码 | **等用户决定** |
-| P0-3 | **修 `/br` 与 sitemap 的矛盾**：把 `/br` 补进 sitemap，或先用 301 下线 | hreflang 声明了 `pt-BR → /br`，但 sitemap 里没有，是明确的技术错误 | 无，**可立即做** |
-| P0-4 | **清掉法务页占位符**：`/terms`、`/privacy` 的 `[上线日期]`（填 2026-11-05）+ `/terms` 的 `[选择一个司法辖区…]` | 收款审核第一眼看条款页，带中文占位符基本被退回 | 司法辖区**需用户定**（新加坡/美国某州） |
-| P0-5 | **补 `/about`、`/contact`**，footer 的 Contact 组补链接 | 合规页齐全才过得了收款审核 | 无，**可立即做** |
-| P0-6 | **sitemap 补 6 条**：`/terms`、`/refund`、`/privacy`、`/voice-removal`、`/about`、`/contact` | 这些页都是 200 却没进 sitemap，等于没提交给 Google | 无，**可立即做** |
+| P0-1 | **修 `/api/tts` 付费扣减**：登录且 `plan != free` 走 `credits_left`，不再走 `checkAndReserveFree` | 现在付费用户生成第二次就被 402 拦住——渠道通了也用不了 | ✅ **已完成** |
+| P0-2 | **确认收款主体**（大陆 / 香港 / 美国）→ 据此定渠道顺序 | 决定后面所有支付工作，主体不定就接支付等于白写代码 | ⬜ 等用户决定 |
+| P0-3 | **修 `/br` 与 sitemap 的矛盾**：把 `/br` 补进 sitemap | hreflang 声明了 `pt-BR → /br`，但 sitemap 里没有，是明确的技术错误 | ✅ **已完成** |
+| P0-4 | **清掉法务页占位符**：`/terms`、`/privacy` 的 `[上线日期]` + 司法辖区 | 收款审核第一眼看条款页，带中文占位符基本被退回 | ⚠️ 日期已填，**法域暂用 Singapore 待确认** |
+| P0-5 | **补 `/about`、`/contact`**，footer 的 Contact 组补链接 | 合规页齐全才过得了收款审核 | ✅ **已完成** |
+| P0-6 | **sitemap 补 6 条**：`/terms`、`/refund`、`/privacy`、`/voice-removal`、`/about`、`/contact` | 这些页都是 200 却没进 sitemap，等于没提交给 Google | ✅ **已完成**（6 条 → 13 条） |
 
 > P0-1~P0-3 详见 §5.6 与 `docs/REVIEW-2026-11.md`；P0-4~P0-6 详见 §5.7 与 `docs/REVIEW-2026-11-pages.md`。
-> 除 P0-2 与 P0-4 的司法辖区外，其余四项不需要额外信息。
+
+**P0 落地记录（2026-11-06 01:05）**
+
+- **P0-1 实现**：`billing.ts` 新增 `getPlanInfo` / `isPaidPlan` / `chargeCredits`。付费用户（starter/creator/onetime）走 `credits_left`，**生成成功后才扣**，失败不扣钱。扣减用 CAS 乐观锁（`eq("credits_left", 旧值)`）+ 3 次重试，避免并发超扣成负数。`recordGeneration` 加 `bucket` 参数，付费用户不再消耗 `free_generations`（否则降级回 free 会被误判为"已用过"）。
+- **P0-3/P0-6**：`sitemap.ts` 从 6 条扩到 **13 条**，按页面类型分优先级（核心页 1/0.9，内容页 0.8，语言副本 0.7，公司页 0.5，法务页 0.3）。
+- **P0-5**：新增 `/about`（明确写"小团队、不假装大公司"、三条不做的事）、`/contact`（四个分类入口 + mailto 预填 subject + 各自的响应时限）。Footer 第 4 列从 Contact 改为 Company，含 About / Contact / 邮箱 / 葡语页。
+- **P0-4**：`constants.ts` 新增 `GOVERNING_LAW`（默认 `Singapore`，可用 `NEXT_PUBLIC_GOVERNING_LAW` 覆盖）和 `LEGAL_UPDATED`（`November 5, 2026`）；`/terms`、`/privacy` 三处占位符已全部替换。
+- 本地验证：13 条 sitemap、13 个页面全 200、法务页搜不到 `[` 残留、footer 的 `/about` `/contact` 链接存在。
+
 
 #### P1 · 转化与内容（审阅 B）
 
@@ -446,11 +455,12 @@ MoR 指以自己的名义卖、并承担代缴税义务的一方。Stripe 是收
 - [ ] Google 搜 `site:voiclu.com` 能看到页面
 - [ ] API 真实链路跑通（等环境变量）
 - [ ] Creem 真买一单额度到账
-- [ ] 全站搜 `[` 无占位符残留（`/terms`、`/privacy` 各一处）
-- [ ] `/sitemap.xml` ≥12 条
-- [ ] 五个合规页 + `/about` + `/contact` 全部 200
+- [x] 全站搜 `[` 无占位符残留（`/terms`、`/privacy` 各一处）—— 2026-11-06 已验证
+- [x] `/sitemap.xml` ≥12 条 —— 现 13 条
+- [x] 五个合规页 + `/about` + `/contact` 全部 200 —— 13 个页面全 200
 - [ ] 首页正文 ≥800 词，标题层级 H1→H2→H3 不跳级
 - [ ] demo 区 6 组音频可点播（无 404）
+- [ ] 付费扣减真机验证：手动把 users.plan 改 creator + credits_left 设值，连生成两次，确认第二次不 402 且额度递减
 
 ---
 
