@@ -71,14 +71,21 @@ async function credit(opts: {
     );
   }
 
-  const result = await grantPlan({
-    provider: "creem",
-    txnId,
-    userId,
-    planId,
-    amount: amountMinor / 100, // Creem 金额单位为分
-    currency,
-  });
+  let result;
+  try {
+    result = await grantPlan({
+      provider: "creem",
+      txnId,
+      userId,
+      planId,
+      amount: amountMinor / 100, // Creem 金额单位为分
+      currency,
+    });
+  } catch (e) {
+    // grantPlan 内部已回滚订单行，这里回 500，让 Creem 重试时能真正重新入账
+    console.error(`[creem:${source}] 入账异常`, { txnId, userId, planId, err: String(e).slice(0, 200) });
+    return NextResponse.json({ error: "grant_failed" }, { status: 500 });
+  }
 
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: 400 });
