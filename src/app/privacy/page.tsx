@@ -42,7 +42,7 @@ export default function PrivacyPage() {
           <p className="mt-2">
             To clone a voice and generate speech, your sample and text are sent to our text-to-speech
             provider, ElevenLabs (ElevenLabs Inc., United States). This is required for the service
-            to work. Account records — email address, hashed login codes, consent logs and character
+            to work. Account records — email address, one-time login codes, consent logs and character
             balances — are stored in Supabase (Supabase Inc.). Audio files are stored in Cloudflare R2
             (Cloudflare, Inc., United States) in a bucket with automatic placement: we do not pin a
             fixed storage region, and Cloudflare writes each object to its nearest available location.
