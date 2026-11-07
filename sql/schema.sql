@@ -14,7 +14,7 @@ create table if not exists public.users (
 -- ============ voices（克隆的声音档案） ============
 create table if not exists public.voices (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null,                  -- auth user id
+  user_id text not null,                  -- auth UUID 或 anon:UUID
   provider text not null default 'elevenlabs',
   provider_voice_id text not null,
   name text,
@@ -28,7 +28,7 @@ create index if not exists idx_voices_user on public.voices(user_id);
 -- ============ jobs（每次合成任务 = 缓存 + 审计） ============
 create table if not exists public.jobs (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null,
+  user_id text not null,
   voice_id uuid not null references public.voices(id),
   text_hash text not null,                -- sha256(provider_voice_id|lang|text)
   lang text not null default 'en',
@@ -46,7 +46,7 @@ create index if not exists idx_jobs_user on public.jobs(user_id);
 -- ============ usage（月度用量 + 免费次数，额度只信数据库，不信前端） ============
 create table if not exists public.usage (
   user_id text primary key,               -- auth user id 或匿名 cookie id（anon uuid）
-  month text not null,                    -- 'YYYY-MM'
+  month text not null,                    -- 最近一次生成所在月；免费次数跨月保留
   chars_used integer not null default 0,
   free_generations integer not null default 0,
   updated_at timestamptz not null default now()

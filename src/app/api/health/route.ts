@@ -41,6 +41,20 @@ async function ordersProviderReady(): Promise<boolean | null> {
   }
 }
 
+/** 无效参数会在 SQL 函数入口返回 false，不写库；用于确认新版额度迁移已执行。 */
+async function atomicBillingReady(): Promise<boolean | null> {
+  try {
+    const { data, error } = await getSupabaseAdmin().rpc("reserve_free_generation", {
+      p_user_id: "",
+      p_chars: 0,
+    });
+    if (error) return false;
+    return data === false;
+  } catch {
+    return null;
+  }
+}
+
 export async function GET() {
   await connection();
   const creem = creemConfigStatus();
@@ -63,14 +77,15 @@ export async function GET() {
   // 数据库迁移状态。false = 还没跑 sql/migrations/2026-11-07-orders-provider.sql，
   // 此时接 Creem 会让入账报 500，别急着开收款。
   const ordersProvider = checks.supabase ? await ordersProviderReady() : null;
+  const atomicBilling = checks.supabase ? await atomicBillingReady() : null;
 
   return NextResponse.json(
     {
-      ok: checks.elevenlabs && checks.storage && checks.supabase && ordersProvider !== false,
+      ok: checks.elevenlabs && checks.storage && checks.supabase && ordersProvider !== false && atomicBilling === true,
       checks,
       // 分段诊断：哪一项没配一目了然。只有布尔值，没有值/长度/前缀
       paymentsDetail: creem,
-      schema: { ordersProvider },
+      schema: { ordersProvider, atomicBilling },
       demoVoiceOverride,
       commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
       env: process.env.VERCEL_ENV ?? "local",

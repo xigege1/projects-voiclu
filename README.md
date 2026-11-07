@@ -34,7 +34,7 @@ npm run dev                  # http://localhost:3000
 
 见 `.env.example`。三个必填块：
 
-1. **Supabase**：建项目 → SQL Editor 里整段执行 `sql/schema.sql` → Settings → API 拷贝三个值。Auth → Emails 里把发件模板里的 `{{ .Token }}` 留着（验证码模式）。
+1. **Supabase**：建项目 → SQL Editor 依次执行 `sql/schema.sql`、`sql/migrations/2026-11-08-atomic-usage-and-orders.sql` → Settings → API 拷贝三个值。已有数据库也必须在部署新版代码前执行该迁移（匿名声纹 ID 类型及额度 RPC）；Auth → Emails 里把发件模板里的 `{{ .Token }}` 留着（验证码模式）。
 2. **ElevenLabs**：Profile → API Keys。Starter（$6/月）起才有 Instant Voice Cloning 与商用许可；免费档只能用 `ELEVENLABS_DEMO_VOICE_ID` 跑通链路。
 3. **R2**：建 bucket `voiclu-audio` → 绑定公开域名（如 cdn.voiclu.com）→ 生成 API Token。
 

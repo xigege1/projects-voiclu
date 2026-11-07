@@ -21,15 +21,10 @@ export function cacheKey(providerVoiceId: string, lang: string, text: string): s
   return crypto.createHash("sha256").update(`${providerVoiceId}|${lang}|${text}`).digest("hex");
 }
 
-export function currentMonth(): string {
-  const d = new Date();
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
-}
-
 /** 查缓存：同 hash 最近一次成功任务 */
 export async function findCachedJob(textHash: string): Promise<string | null> {
   const db = getSupabaseAdmin();
-  const { data } = await db
+  const { data, error } = await db
     .from("jobs")
     .select("audio_url")
     .eq("text_hash", textHash)
@@ -37,13 +32,11 @@ export async function findCachedJob(textHash: string): Promise<string | null> {
     .not("audio_url", "is", null)
     .order("created_at", { ascending: false })
     .limit(1);
+  if (error) throw error;
   return data?.[0]?.audio_url ?? null;
 }
 
-/**
- * 额度检查。返回 null = 放行；返回数字 = 需要扣的字符数没问题；
- * 抛 QuotaError = 应弹付费窗（HTTP 402）。
- */
+/** 额度不足时由接口转换为 HTTP 402。 */
 export class QuotaError extends Error {
   constructor(
     public reason: "free_used" | "chars_exceeded" | "credits_exceeded",
@@ -58,31 +51,39 @@ export async function checkAndReserveFree(
   text: string
 ): Promise<{ chars: number }> {
   const chars = text.length;
-  const db = getSupabaseAdmin();
-  const month = currentMonth();
-  const userId = identity.userId;
-
-  const { data: usage } = await db
-    .from("usage")
-    .select("chars_used, free_generations")
-    .eq("user_id", userId)
-    .eq("month", month)
-    .maybeSingle();
-
-  const freeUsed = usage?.free_generations ?? 0;
-  if (freeUsed >= 1) {
-    throw new QuotaError("free_used", "Free generation already used — upgrade to continue.");
-  }
   if (chars > FREE_CHARS) {
     throw new QuotaError(
       "chars_exceeded",
       `Free generations are limited to ${FREE_CHARS} characters (about 30 seconds of audio).`
     );
   }
+  const { data: reserved, error } = await getSupabaseAdmin().rpc("reserve_free_generation", {
+    p_user_id: identity.userId,
+    p_chars: chars,
+  });
+  if (error) throw error;
+  if (!reserved) {
+    throw new QuotaError("free_used", "Free generation already used — upgrade to continue.");
+  }
   return { chars };
 }
 
-/** 生成成功后：记 usage + 写 job。api_called=false 表示缓存命中（不扣额度）。 */
+/** 供应商或存储失败时归还尚未完成的免费次数。 */
+export async function releaseFreeGeneration(userId: string): Promise<void> {
+  const { error } = await getSupabaseAdmin().rpc("release_free_generation", { p_user_id: userId });
+  if (error) throw error;
+}
+
+/** 供应商或存储失败时原子返还预扣的付费字符。 */
+export async function restoreCredits(userId: string, chars: number): Promise<void> {
+  const { error } = await getSupabaseAdmin().rpc("restore_credits", {
+    p_user_id: userId,
+    p_chars: chars,
+  });
+  if (error) throw error;
+}
+
+/** 生成成功后：在数据库一次事务中写 job 与月度用量。 */
 export async function recordGeneration(opts: {
   identity: Identity;
   voiceRowId: string;
@@ -92,55 +93,28 @@ export async function recordGeneration(opts: {
   audioUrl: string | null;
   apiCalled: boolean;
   charged: boolean;
-  /** 扣哪个桶：free = 免费次数（每身份 1 次）；credits = 付费字符额度（已单独扣） */
+  /** free = 免费次数已预留；credits = 付费字符已预扣 */
   bucket?: "free" | "credits";
 }): Promise<void> {
-  const db = getSupabaseAdmin();
-  const month = currentMonth();
-
-  await db.from("jobs").insert({
-    user_id: opts.identity.userId,
-    voice_id: opts.voiceRowId,
-    text_hash: opts.textHash,
-    lang: opts.lang,
-    chars: opts.chars,
-    status: opts.audioUrl ? "done" : "failed",
-    audio_url: opts.audioUrl,
-    api_called: opts.apiCalled,
-    charged: opts.charged,
-  });
-
-  if (!opts.charged) return;
-
-  const bucket = opts.bucket ?? "free";
-
-  const { data: usage } = await db
-    .from("usage")
-    .select("chars_used, free_generations")
-    .eq("user_id", opts.identity.userId)
-    .eq("month", month)
-    .maybeSingle();
-
-  if (usage) {
-    await db
-      .from("usage")
-      .update({
-        chars_used: usage.chars_used + opts.chars,
-        // 付费用户不消耗免费次数，否则降级回 free 时会被误判为"已用过"
-        free_generations:
-          bucket === "free" ? usage.free_generations + 1 : usage.free_generations,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", opts.identity.userId)
-      .eq("month", month);
-  } else {
-    await db.from("usage").insert({
-      user_id: opts.identity.userId,
-      month,
-      chars_used: opts.chars,
-      free_generations: bucket === "free" ? 1 : 0,
+  const jobId = crypto.randomUUID();
+  let lastError: Error | null = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const { error } = await getSupabaseAdmin().rpc("record_generation", {
+      p_job_id: jobId,
+      p_user_id: opts.identity.userId,
+      p_voice_id: opts.voiceRowId,
+      p_text_hash: opts.textHash,
+      p_lang: opts.lang,
+      p_chars: opts.chars,
+      p_audio_url: opts.audioUrl,
+      p_api_called: opts.apiCalled,
+      p_charged: opts.charged,
+      p_bucket: opts.bucket ?? "free",
     });
+    if (!error) return;
+    lastError = error;
   }
+  throw lastError;
 }
 
 /* ============================================================
@@ -174,8 +148,7 @@ export function isPaidPlan(plan: string | undefined | null): boolean {
  * 用乐观锁（CAS）而不是读-改-写：Supabase 的 update 没法原子自减，
  * 并发两个请求会各自读到同一个旧值，都减去 chars → 超扣甚至扣成负数。
  * 这里用 `eq("credits_left", 旧值)` 做条件更新，影响 0 行就是被别人抢先了，
- * 重读最新值再试。3 次都失败就抛错（此时音频已生成，宁可报错让用户重试，
- * 也不能悄悄白送一次）。
+ * 重读最新值再试。预扣发生在供应商调用之前，避免并发请求造成额外成本。
  */
 export async function chargeCredits(userId: string, chars: number): Promise<number> {
   const db = getSupabaseAdmin();

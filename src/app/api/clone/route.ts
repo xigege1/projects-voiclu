@@ -50,11 +50,12 @@ export async function POST(req: Request) {
     // ---- 简单防滥用：同身份 24h 内最多 5 次克隆尝试 ----
     const db = getSupabaseAdmin();
     const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
-    const { count } = await db
+    const { count, error: countError } = await db
       .from("voices")
       .select("id", { count: "exact", head: true })
       .eq("user_id", identity.userId)
       .gte("created_at", since);
+    if (countError) throw countError;
     if ((count ?? 0) >= 5) {
       return NextResponse.json(
         { error: "rate_limited", message: "Too many clone attempts today. Try again tomorrow." },

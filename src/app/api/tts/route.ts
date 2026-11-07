@@ -4,9 +4,9 @@
  * → { audioUrl, cached, charsLeft? }
  *
  * 成本三道闸（方案 D2，这一条决定免费流量再大也不亏钱）：
- *   1. 额度检查（usage 表，免费 1 次 / 付费按字符扣）
+ *   1. 调供应商前预留额度（免费 1 次 / 付费按字符扣），上游失败时归还
  *   2. 缓存键 sha256(provider_voice_id|lang|text) —— 命中直接返回 URL，不扣额度
- *   3. 只有真正调了 API 才扣额度
+ *   3. 成功后在同一数据库事务里记录 job 与用量
  */
 import { NextResponse } from "next/server";
 import { resolveIdentity } from "@/lib/identity";
@@ -21,6 +21,8 @@ import {
   getPlanInfo,
   isPaidPlan,
   chargeCredits,
+  releaseFreeGeneration,
+  restoreCredits,
   QuotaError,
 } from "@/lib/billing";
 import { sendFreeGenerationDone } from "@/lib/emails";
@@ -101,31 +103,34 @@ export async function POST(req: Request) {
           { status: 402 }
         );
       }
-      // 不预扣：生成成功后才真正扣（见下），失败不扣钱
-    } else {
-      try {
+    }
+    let creditsLeft: number | undefined;
+    try {
+      if (paid) {
+        // 在调用付费供应商前扣减，避免并发请求都通过预检后产生额外成本。
+        creditsLeft = await chargeCredits(identity.userId, text.length);
+      } else {
         await checkAndReserveFree(identity, text);
-      } catch (e) {
-        if (e instanceof QuotaError) {
-          return NextResponse.json(
-            { error: "quota_exceeded", reason: e.reason, message: e.message, upgradeUrl: "/pricing" },
-            { status: 402 }
-          );
-        }
-        throw e;
       }
+    } catch (e) {
+      if (e instanceof QuotaError) {
+        return NextResponse.json(
+          { error: "quota_exceeded", reason: e.reason, message: e.message, upgradeUrl: "/pricing" },
+          { status: 402 }
+        );
+      }
+      throw e;
     }
 
-    // ---- 闸 3：真调 API 才花钱 ----
-    const audio = await synthesize(voice.provider_voice_id, text);
-    // 文件名带 AI-generated 标记（合规：生成音频可识别）
-    const url = await putAudio(audioKey("voiclu-AI-generated"), audio, "audio/mpeg");
-
-    // 音频已经生成（钱已花），这一步扣额度。CAS 失败会抛错让用户重试，
-    // 不会出现「扣成负数」或「白送一次」。
-    let creditsLeft: number | undefined;
-    if (bucket === "credits") {
-      creditsLeft = await chargeCredits(identity.userId, text.length);
+    // 供应商或存储失败才归还预留额度；已成功生成的音频会保留扣费。
+    let url: string;
+    try {
+      const audio = await synthesize(voice.provider_voice_id, text);
+      url = await putAudio(audioKey("voiclu-AI-generated"), audio, "audio/mpeg");
+    } catch (e) {
+      if (paid) await restoreCredits(identity.userId, text.length);
+      else await releaseFreeGeneration(identity.userId);
+      throw e;
     }
 
     await recordGeneration({
