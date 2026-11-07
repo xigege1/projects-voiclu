@@ -44,10 +44,9 @@ export default function PrivacyPage() {
             provider, ElevenLabs (ElevenLabs Inc., United States). This is required for the service
             to work. Account records — email address, one-time login codes, consent logs and character
             balances — are stored in Supabase (Supabase Inc.). Audio files are stored in Cloudflare R2
-            (Cloudflare, Inc., United States) in a bucket with automatic placement: we do not pin a
-            fixed storage region, and Cloudflare writes each object to its nearest available location.
-            Transactional email (login codes and receipts) is delivered through Resend (Resend, Inc.).
-            We do not sell your data to anyone.
+            (Cloudflare, Inc.) in its Western North America region (WNAM) and served through
+            cdn.voiclu.com. Transactional email (login codes and receipts) is delivered through Resend
+            (Resend, Inc.). We do not sell your data to anyone.
           </p>
         </section>
 
