@@ -14,6 +14,7 @@
  */
 import { NextResponse, connection } from "next/server";
 import { elevenlabsConfigured } from "@/lib/elevenlabs";
+import { creemConfigured } from "@/lib/creem";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 // 注意：本项目开了 nextConfig.cacheComponents，route segment 的
@@ -51,7 +52,8 @@ export async function GET() {
     supabase: has("NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY"),
     // 可选能力
     email: has("RESEND_API_KEY"),
-    payments: has("CREEM_WEBHOOK_SECRET"),
+    // 收款：API key + webhook 签名密钥 + 三个产品 ID，缺任何一项都收不了钱
+    payments: has("CREEM_WEBHOOK_SECRET") && creemConfigured(),
   };
 
   // 这一项为 true 是「坏事」：付费账号下它会跳过真实克隆

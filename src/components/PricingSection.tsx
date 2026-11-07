@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import CheckoutButton from "@/components/CheckoutButton";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -57,18 +57,16 @@ export default function PricingSection({ compact = false }: { compact?: boolean 
               </CardContent>
               <CardFooter>
                 {/*
-                  TODO(checkout)：拿到渠道产品后，把 href 指向 <a href={checkoutUrl(p.id)}>。
-                  checkoutUrl 建议从 env 读（CREEM_CHECKOUT_STARTER / _CREATOR / _ONETIME），
-                  这样以后加 Stripe 只需再补一组 STRIPE_PRICE_*，不用改组件。
-                  收款侧入账已渠道无关：见 src/lib/payments.ts 的 grantPlan()。
+                  真正的结账入口：前端拿登录态换一次性 checkout 会话，再跳 Creem 收银台。
+                  产品 ID 走 env（CREEM_PRODUCT_STARTER / _CREATOR / _ONETIME），
+                  以后加 Stripe 只需再补一组 STRIPE_PRODUCT_*，组件不用改。
+                  入账已渠道无关：见 src/lib/payments.ts 的 grantPlan()。
                 */}
-                <Button
-                  asChild
-                  className={cn("w-full", p.highlight && "btn-primary")}
-                  variant={p.highlight ? "default" : "outline"}
-                >
-                  <a href="/pricing">{p.id === "onetime" ? "Buy once" : "Subscribe"}</a>
-                </Button>
+                <CheckoutButton
+                  planId={p.id}
+                  label={p.id === "onetime" ? "Buy once" : "Subscribe"}
+                  highlighted={p.highlight}
+                />
               </CardFooter>
             </Card>
           ))}
