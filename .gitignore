@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# 本地 demo 音频生成状态（记录上次用的 voice_id，不随仓库走）
+/.demo/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

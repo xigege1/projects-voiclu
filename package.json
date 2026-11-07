@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "indexnow": "node scripts/indexnow.mjs",
-    "indexnow:dry": "node scripts/indexnow.mjs --dry-run"
+    "indexnow:dry": "node scripts/indexnow.mjs --dry-run",
+    "demo:audio": "node scripts/gen-demo-audio.mjs",
+    "demo:audio:dry": "node scripts/gen-demo-audio.mjs --dry-run"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1161.0",

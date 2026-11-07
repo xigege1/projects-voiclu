@@ -58,6 +58,7 @@ try {
 } catch (e) {
   console.error("✗ 查询订阅信息失败：", e.message);
   console.error("  · 401 一般是 key 写错了或已被删除");
+  console.error("  · 403 是 key 权限不足：建 key 时没开「用户 → 读取」");
   console.error("  · 网络不通的话，本机需要挂代理再跑（HTTPS_PROXY 环境变量）");
   process.exit(1);
 }
@@ -94,12 +95,14 @@ try {
 }
 
 // ---- 自动写 DEMO_VOICE_ID ----
+// 只在「确实不能真克隆」时才自动填，否则会把付费账号的真实克隆悄悄降级成模拟克隆。
 const currentDemo = envValue("ELEVENLABS_DEMO_VOICE_ID");
-if (currentDemo) {
+if (currentDemo && canClone) {
+  console.log(`\n! ELEVENLABS_DEMO_VOICE_ID 当前有值（${currentDemo}），但账号已支持真实克隆。`);
+  console.log("  这项会让克隆步骤跳过真实 API、永远返回同一个预置声音。请清空它。");
+} else if (currentDemo) {
   console.log(`\n✓ ELEVENLABS_DEMO_VOICE_ID 已配置：${currentDemo}`);
-} else if (voices.length === 0) {
-  console.log("\n! 没有拿到声音列表，无法自动配置演示声音。手动填一个 voice_id 到 ELEVENLABS_DEMO_VOICE_ID。");
-} else {
+} else if (!canClone && voices.length > 0) {
   const pick = voices.find((v) => v.category === "premade") ?? voices[0];
   let out = raw;
   if (/^\s*ELEVENLABS_DEMO_VOICE_ID\s*=/m.test(out)) {
@@ -111,6 +114,10 @@ if (currentDemo) {
   console.log(`\n✓ 已自动写入 ${path.basename(ENV_FILE)}：`);
   console.log(`   ELEVENLABS_DEMO_VOICE_ID=${pick.voice_id}   （${pick.name}）`);
   console.log("   现在克隆步骤会跳过真实 API，用这个声音跑通全链路。");
+} else if (!canClone) {
+  console.log("\n! 没有拿到声音列表，无法自动配置演示声音。手动填一个 voice_id 到 ELEVENLABS_DEMO_VOICE_ID。");
+} else {
+  console.log("\n✓ 账号可真实克隆，ELEVENLABS_DEMO_VOICE_ID 保持为空 —— 这是正确状态。");
 }
 
 // ---- 结论 ----
