@@ -55,6 +55,25 @@ export function creemConfigured(): boolean {
   return Boolean(process.env.CREEM_API_KEY?.trim()) && PLANS.every((p) => productIdFor(p.id));
 }
 
+/**
+ * 分段自检结果：只回布尔，不回值、不回前缀。
+ *
+ * 收不到钱时最常卡在三处——key 没填、产品 ID 少一个、webhook 密钥没填。
+ * 合成一个 payments: false 无法定位，所以拆开给 /api/health 用。
+ * testMode 的作用是提醒「现在打的是 test-api，不会真扣钱」。
+ */
+export function creemConfigStatus() {
+  const key = process.env.CREEM_API_KEY?.trim() ?? "";
+  return {
+    apiKey: Boolean(key),
+    testMode: key.startsWith("creem_test_"),
+    webhookSecret: Boolean(process.env.CREEM_WEBHOOK_SECRET?.trim()),
+    products: Object.fromEntries(
+      PLANS.map((p) => [p.id, Boolean(productIdFor(p.id))])
+    ) as Record<string, boolean>,
+  };
+}
+
 export type CheckoutResult = { ok: true; url: string } | { ok: false; error: string; status: number };
 
 /**

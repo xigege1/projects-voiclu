@@ -14,7 +14,7 @@
  */
 import { NextResponse, connection } from "next/server";
 import { elevenlabsConfigured } from "@/lib/elevenlabs";
-import { creemConfigured } from "@/lib/creem";
+import { creemConfigured, creemConfigStatus } from "@/lib/creem";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 // 注意：本项目开了 nextConfig.cacheComponents，route segment 的
@@ -43,6 +43,7 @@ async function ordersProviderReady(): Promise<boolean | null> {
 
 export async function GET() {
   await connection();
+  const creem = creemConfigStatus();
   const checks = {
     // 真实生成的核心依赖
     elevenlabs: elevenlabsConfigured(),
@@ -67,6 +68,8 @@ export async function GET() {
     {
       ok: checks.elevenlabs && checks.storage && checks.supabase && ordersProvider !== false,
       checks,
+      // 分段诊断：哪一项没配一目了然。只有布尔值，没有值/长度/前缀
+      paymentsDetail: creem,
       schema: { ordersProvider },
       demoVoiceOverride,
       commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
