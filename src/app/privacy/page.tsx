@@ -43,7 +43,8 @@ export default function PrivacyPage() {
             To clone a voice and generate speech, your sample and text are sent to our text-to-speech
             provider, ElevenLabs (ElevenLabs Inc., United States). This is required for the service
             to work. Account records — email address, one-time login codes, consent logs and character
-            balances — are stored in Supabase (Supabase Inc.). Audio files are stored in Cloudflare R2
+            balances — are stored in Supabase (Supabase Inc.), in its East US (us-east-1) region.
+            Audio files are stored in Cloudflare R2
             (Cloudflare, Inc.) in its Western North America region (WNAM) and served through
             cdn.voiclu.com. Transactional email (login codes and receipts) is delivered through Resend
             (Resend, Inc.). We do not sell your data to anyone.
