@@ -14,6 +14,7 @@
  */
 import { NextResponse, connection } from "next/server";
 import { elevenlabsConfigured } from "@/lib/elevenlabs";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 // 注意：本项目开了 nextConfig.cacheComponents，route segment 的
 // `export const dynamic` / `revalidate` 在此模式下不被允许（构建会直接失败）。
@@ -21,6 +22,22 @@ import { elevenlabsConfigured } from "@/lib/elevenlabs";
 
 function has(...names: string[]): boolean {
   return names.every((n) => Boolean(process.env[n]?.trim()));
+}
+
+/**
+ * orders 表是否已有 provider 列（2026-11-07 多渠道收款迁移）。
+ * 迁移是手工在 Supabase 跑的，最容易漏；漏了会让 webhook 入账直接 500。
+ * 返回 null = 查不了（缺 service role key 或网络问题）。
+ */
+async function ordersProviderReady(): Promise<boolean | null> {
+  try {
+    const { error } = await getSupabaseAdmin().from("orders").select("provider").limit(1);
+    if (!error) return true;
+    if (String(error.code) === "42703") return false; // undefined_column
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 export async function GET() {
@@ -40,10 +57,15 @@ export async function GET() {
   // 这一项为 true 是「坏事」：付费账号下它会跳过真实克隆
   const demoVoiceOverride = has("ELEVENLABS_DEMO_VOICE_ID");
 
+  // 数据库迁移状态。false = 还没跑 sql/migrations/2026-11-07-orders-provider.sql，
+  // 此时接 Creem 会让入账报 500，别急着开收款。
+  const ordersProvider = checks.supabase ? await ordersProviderReady() : null;
+
   return NextResponse.json(
     {
-      ok: checks.elevenlabs && checks.storage && checks.supabase,
+      ok: checks.elevenlabs && checks.storage && checks.supabase && ordersProvider !== false,
       checks,
+      schema: { ordersProvider },
       demoVoiceOverride,
       commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
       env: process.env.VERCEL_ENV ?? "local",

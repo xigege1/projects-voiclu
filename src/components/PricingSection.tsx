@@ -56,7 +56,12 @@ export default function PricingSection({ compact = false }: { compact?: boolean 
                 </ul>
               </CardContent>
               <CardFooter>
-                {/* TODO(checkout): 接入 Creem 后把 href 换成对应 checkout 链接 */}
+                {/*
+                  TODO(checkout)：拿到渠道产品后，把 href 指向 <a href={checkoutUrl(p.id)}>。
+                  checkoutUrl 建议从 env 读（CREEM_CHECKOUT_STARTER / _CREATOR / _ONETIME），
+                  这样以后加 Stripe 只需再补一组 STRIPE_PRICE_*，不用改组件。
+                  收款侧入账已渠道无关：见 src/lib/payments.ts 的 grantPlan()。
+                */}
                 <Button
                   asChild
                   className={cn("w-full", p.highlight && "btn-primary")}

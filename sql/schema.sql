@@ -57,12 +57,18 @@ create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null,
   plan text not null,
-  provider_txn text unique not null,      -- 唯一约束 = 同一交易重复回调只入账一次
+  provider text not null default 'creem',  -- creem | stripe | paddle —— 一个订单只属于一个收款渠道
+  provider_txn text not null,              -- 渠道侧交易号
   amount numeric not null,
   currency text not null default 'USD',
   status text not null default 'paid',    -- paid | refunded | failed
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  -- 幂等键带上 provider：不同渠道的交易号命名空间互不相干，不能只按 txn 去重；
+  -- 同时这个字段决定对账和退款该找哪个渠道。
+  unique (provider, provider_txn)
 );
+create index if not exists orders_provider_created_idx
+  on public.orders (provider, created_at desc);
 
 -- ============ voice_removals（/voice-removal 表单，48 小时下架承诺的凭证） ============
 create table if not exists public.voice_removals (
