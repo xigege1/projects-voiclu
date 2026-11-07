@@ -55,10 +55,24 @@ async function main() {
   console.log(`发件人：${FROM}`);
   console.log("");
 
+  const idx = process.argv.indexOf("--send");
+  const to = idx > -1 ? process.argv[idx + 1] : null;
+
   // 1) key 是否有效 + 域名列表
   const res = await fetch("https://api.resend.com/domains", { headers: auth });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
+    // 只发信权限的 key 不能读域名列表，这不是故障：直接靠发一封探针判断域名通不通
+    if (res.status === 401 && text.includes("restricted_api_key")) {
+      console.log("· key 权限为「仅发送」，读不到域名列表 —— 跳过域名检查，改用发一封探针来判断。");
+      if (!to) {
+        console.log("");
+        console.log("下一步：node scripts/check-resend.mjs --send 你的邮箱");
+        return;
+      }
+      await sendTest(to);
+      return;
+    }
     console.error(`✘ 查域名失败：HTTP ${res.status} ${text.slice(0, 300)}`);
     console.error("  401 = key 无效；403 = key 权限不足（换成 Full access 或 Sending access）。");
     process.exit(1);
@@ -92,13 +106,18 @@ async function main() {
   console.log(`✔ ${want} 已验证，可以发信。`);
 
   // 2) 可选：真发一封
-  const idx = process.argv.indexOf("--send");
-  const to = idx > -1 ? process.argv[idx + 1] : null;
   if (!to) {
     console.log("");
     console.log("要验证投递，加参数：node scripts/check-resend.mjs --send 你的邮箱");
     return;
   }
+  await sendTest(to);
+}
+
+/** 发一封真邮件。这是唯一能同时证明「key 有效 + 发件域已验证」的动作。 */
+async function sendTest(to) {
+  console.log("");
+  console.log(`发探针到 ${to} …`);
 
   const sendRes = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -118,6 +137,9 @@ async function main() {
   const out = await sendRes.text();
   if (!sendRes.ok) {
     console.error(`✘ 发送失败：HTTP ${sendRes.status} ${out.slice(0, 300)}`);
+    if (sendRes.status === 403) {
+      console.error("  → 403 基本都是发件域没验证：去 Resend → Domains 看缺哪条 DNS，在 Cloudflare 补。");
+    }
     process.exit(1);
   }
   let id = "";
