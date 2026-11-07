@@ -44,6 +44,14 @@ export const GOVERNING_LAW = process.env.NEXT_PUBLIC_GOVERNING_LAW || "Singapore
 export const LEGAL_UPDATED = "November 8, 2026";
 
 /**
+ * 法务页正文最后改动日（sitemap lastmod 用）。
+ *
+ * 2026-11-08：Creem 审核打回后改 /privacy（补真实处理方与区域）、/terms（加 3.1
+ * NSFW 禁令）、新增 /aup。三条 URL 共用这一天，因为确实同一天改的。
+ */
+export const LEGAL_REVISED = "2026-11-08";
+
+/**
  * TTS 能力与对外文案的一致性（2026-11-07 核对 ElevenLabs 官方 models 文档）
  *
  * 旧配置 eleven_multilingual_v2 只有 29 种语言，全站却写 "75+" —— 名不副实。

@@ -74,6 +74,53 @@ export function creemConfigStatus() {
   };
 }
 
+/**
+ * 生成 Creem 客户门户的一次性登录链接。
+ *
+ * 为什么需要：Creem 的商户约定里有一条——用户必须能在产品内自助取消订阅。
+ * 收据邮件里虽然有门户链接，但用户删了邮件就找不回来，所以站内要能直接进。
+ *
+ * 这里不存 customer_id：Creem 允许按邮箱反查客户，而我们本来就有用户邮箱。
+ * 少存一份第三方 ID，就少一处会不一致的地方。
+ */
+export async function customerPortalLink(
+  email: string
+): Promise<{ ok: true; url: string } | { ok: false; error: "not_found" | "creem_error" | "not_configured" }> {
+  const key = process.env.CREEM_API_KEY?.trim();
+  if (!key) return { ok: false, error: "not_configured" };
+
+  const base = apiBase();
+  try {
+    const cRes = await fetch(`${base}/v1/customers?email=${encodeURIComponent(email)}`, {
+      headers: { "x-api-key": key },
+    });
+    // 404 = 这个邮箱还没在 Creem 下过单，不是故障
+    if (cRes.status === 404) return { ok: false, error: "not_found" };
+    if (!cRes.ok) {
+      console.error(`[creem:portal] customer ${cRes.status} ${(await cRes.text()).slice(0, 200)}`);
+      return { ok: false, error: "creem_error" };
+    }
+    const customer = (await cRes.json()) as { id?: string };
+    if (!customer.id) return { ok: false, error: "not_found" };
+
+    const bRes = await fetch(`${base}/v1/customers/billing`, {
+      method: "POST",
+      headers: { "x-api-key": key, "Content-Type": "application/json" },
+      body: JSON.stringify({ customer_id: customer.id }),
+    });
+    if (!bRes.ok) {
+      console.error(`[creem:portal] billing ${bRes.status} ${(await bRes.text()).slice(0, 200)}`);
+      return { ok: false, error: "creem_error" };
+    }
+    const data = (await bRes.json()) as { customer_portal_link?: string };
+    if (!data.customer_portal_link) return { ok: false, error: "creem_error" };
+    return { ok: true, url: data.customer_portal_link };
+  } catch (e) {
+    console.error("[creem:portal] network", e);
+    return { ok: false, error: "creem_error" };
+  }
+}
+
 export type CheckoutResult = { ok: true; url: string } | { ok: false; error: string; status: number };
 
 /**

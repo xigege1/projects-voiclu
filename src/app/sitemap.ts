@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE, CONTENT_UPDATED, PAGES_ADDED } from "@/lib/constants";
+import { SITE, CONTENT_UPDATED, PAGES_ADDED, LEGAL_REVISED } from "@/lib/constants";
 
 /**
  * sitemap —— 所有返回 200 且允许索引的页面都应该在这里，否则等于没提交给 Google。
@@ -28,11 +28,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/text-to-speech", 0.8, "weekly", CONTENT_UPDATED],
     // 语言副本（与首页 hreflang 对应，漏了就是 hreflang 指向 sitemap 外的页面）
     ["/br", 0.7, "weekly", CONTENT_UPDATED],
-    // 公司页 + 法务页：11-06 新建，或当天清掉占位符 / 补上法域
+    // 公司页：11-06 新建
     ["/about", 0.5, "monthly", PAGES_ADDED],
     ["/contact", 0.5, "monthly", PAGES_ADDED],
-    ["/privacy", 0.3, "yearly", PAGES_ADDED],
-    ["/terms", 0.3, "yearly", PAGES_ADDED],
+    // 法务页：11-08 因 Creem 审核整体改过一遍，/aup 是新增
+    ["/privacy", 0.3, "yearly", LEGAL_REVISED],
+    ["/terms", 0.3, "yearly", LEGAL_REVISED],
+    ["/aup", 0.3, "yearly", LEGAL_REVISED],
     ["/refund", 0.3, "yearly", PAGES_ADDED],
     ["/voice-removal", 0.3, "yearly", PAGES_ADDED],
   ];

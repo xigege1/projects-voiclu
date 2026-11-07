@@ -28,6 +28,7 @@ export default function Footer() {
           <ul className="space-y-2">
             <li><Link className="transition-colors hover:text-foreground" href="/terms">Terms of Service</Link></li>
             <li><Link className="transition-colors hover:text-foreground" href="/privacy">Privacy Policy</Link></li>
+            <li><Link className="transition-colors hover:text-foreground" href="/aup">Acceptable Use Policy</Link></li>
             <li><Link className="transition-colors hover:text-foreground" href="/refund">Refund Policy</Link></li>
             <li><Link className="transition-colors hover:text-foreground" href="/voice-removal">Voice Removal Request</Link></li>
           </ul>

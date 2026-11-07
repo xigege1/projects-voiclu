@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE } from "@/lib/constants";
+import ManageSubscriptionButton from "@/components/ManageSubscriptionButton";
 
 /**
  * 支付成功落地页（Creem success_url 指向这里）。
@@ -42,14 +43,19 @@ export default function SuccessPage() {
           with the email you paid with and we will sort it out.
         </p>
         <p>
-          <strong className="font-semibold text-foreground">Cancelling.</strong> Subscriptions can
-          be cancelled any time from the Creem customer portal link in your receipt. Refund terms
-          are on our{" "}
+          <strong className="font-semibold text-foreground">Cancelling.</strong> You can cancel
+          yourself at any time — the button below opens the Creem customer portal, where your
+          subscription, payment method and invoices live. Cancelling stops future charges and keeps
+          your plan active until the end of the paid period. Refund terms are on our{" "}
           <Link className="underline" href="/refund">
             refund policy
           </Link>
           .
         </p>
+      </div>
+
+      <div className="mt-6">
+        <ManageSubscriptionButton />
       </div>
 
       <div className="mt-8 flex flex-wrap gap-3">

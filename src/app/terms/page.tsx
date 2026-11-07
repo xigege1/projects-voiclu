@@ -44,7 +44,12 @@ export default function TermsPage() {
           <p className="mt-2">
             Voices reported through our{" "}
             <a href="/voice-removal" className="text-[var(--brand)] underline">removal page</a>{" "}
-            are suspended while we review and removed if the uploader cannot show consent.
+            are suspended while we review and removed if the uploader cannot show consent. The full
+            list of prohibited uses, and how reports are handled, is in our{" "}
+            <a href="/aup" className="text-[var(--brand)] underline">
+              Acceptable Use Policy
+            </a>
+            .
           </p>
 
           <h3 className="mt-6 text-sm font-bold text-foreground">
