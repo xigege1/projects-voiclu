@@ -20,7 +20,27 @@ export async function POST(req: Request) {
   });
 
   if (error) {
-    return NextResponse.json({ error: "otp_failed", message: error.message }, { status: 500 });
+    // Supabase 的原始报错对用户没有意义，且会把 "Error sending confirmation email"
+    // 这种 SMTP 故障直接甩到界面上。按可行动性分类后再返回。
+    const raw = error.message ?? "";
+    console.error("[auth:request-code]", raw);
+
+    if (/only request this after|rate limit|too many/i.test(raw)) {
+      return NextResponse.json(
+        { error: "rate_limited", message: "Too many attempts. Please wait a minute and try again." },
+        { status: 429 }
+      );
+    }
+    if (/sending confirmation|error sending|smtp/i.test(raw)) {
+      return NextResponse.json(
+        {
+          error: "email_undeliverable",
+          message: `We could not deliver the code to ${email}. Please try again in a minute, or email support@voiclu.com and we will sign you in manually.`,
+        },
+        { status: 502 }
+      );
+    }
+    return NextResponse.json({ error: "otp_failed", message: raw }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
 }
