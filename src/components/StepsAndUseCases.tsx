@@ -15,7 +15,7 @@ const STEPS = [
   {
     n: 3,
     title: "Download the audio",
-    desc: "MP3 in the browser, WAV on Creator plans. Every file is marked AI-generated.",
+    desc: "MP3, straight from the browser. Every file is AI-generated from the voice you cloned.",
   },
 ];
 

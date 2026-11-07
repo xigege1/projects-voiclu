@@ -26,7 +26,7 @@ const FAQ = [
   },
   {
     q: "What file do I get?",
-    a: "MP3 on all plans. WAV on Creator plans.",
+    a: "MP3 on every plan, downloaded straight from the browser. We do not offer WAV yet.",
   },
   {
     q: "Is there an API?",

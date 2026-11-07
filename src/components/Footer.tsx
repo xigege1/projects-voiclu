@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t py-4 text-center text-xs text-muted-foreground">
-        © 2026 {SITE.name}. Audio output is AI-generated and watermarked.
+        © 2026 {SITE.name}. All audio output is AI-generated from voices cloned with the speaker&apos;s consent.
       </div>
     </footer>
   );

@@ -104,7 +104,7 @@ export const PLANS = [
       `All ${LANG_COUNT_LABEL} languages`,
       "Commercial license",
       "Voice re-cloning",
-      "WAV output + priority queue",
+      "No watermark",
     ],
   },
   {
@@ -152,11 +152,11 @@ export const FAQ_HOME = [
   },
   {
     q: "Is there a watermark?",
-    a: "Free samples carry a small \"generated with Voiclu\" tag. Paid output has no tag. Every file is marked as AI-generated in its metadata.",
+    a: "No. Nothing is tagged, free or paid — what you hear in the preview is what you download. Because there is no watermark, our terms ask you to disclose that the voice is synthetic when you publish the audio.",
   },
   {
     q: "What file format do I get?",
-    a: "MP3 on all plans. WAV on Creator. Files download straight from the browser — no queue, no waiting rooms.",
+    a: "MP3 on every plan. Files download straight from the browser — no queue, no waiting rooms.",
   },
   {
     q: "Can I get my money back?",

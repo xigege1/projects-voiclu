@@ -115,7 +115,7 @@ export default function FreePage() {
                 </tr>
                 <tr>
                   <td className="py-2 font-medium">Watermark</td>
-                  <td>on sample</td>
+                  <td>none</td>
                   <td>none</td>
                   <td>none</td>
                 </tr>
