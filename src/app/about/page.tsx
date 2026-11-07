@@ -105,10 +105,6 @@ export default function AboutPage() {
               Pricing
             </Link>{" "}
             ·{" "}
-            <Link href="/alternatives" className="text-[var(--brand)] underline">
-              ElevenLabs alternatives
-            </Link>{" "}
-            ·{" "}
             <Link href="/terms" className="text-[var(--brand)] underline">
               Terms
             </Link>{" "}

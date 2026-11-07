@@ -18,8 +18,8 @@ export default function Footer() {
             <li><Link className="transition-colors hover:text-foreground" href="/">AI Voice Cloning</Link></li>
             <li><Link className="transition-colors hover:text-foreground" href="/free">Free AI Voice Cloning</Link></li>
             <li><Link className="transition-colors hover:text-foreground" href="/text-to-speech">Text to Speech</Link></li>
-            <li><Link className="transition-colors hover:text-foreground" href="/best">Best AI Voice Clone</Link></li>
-            <li><Link className="transition-colors hover:text-foreground" href="/alternatives">ElevenLabs Alternatives</Link></li>
+            {/* /best 与 /alternatives 正文仍是 [实测填写] 占位符且 noindex，
+                填完真实数据前不放进导航 —— 商户审核会点进来看。 */}
             <li><Link className="transition-colors hover:text-foreground" href="/pricing">Pricing</Link></li>
           </ul>
         </div>

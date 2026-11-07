@@ -23,7 +23,7 @@ export default function PrivacyPage() {
             <li>Basic analytics (page views, tool interactions — no cross-site tracking)</li>
           </ul>
           <p className="mt-2">
-            Payments are processed by our Merchant of Record (Creem / Paddle). We never see or
+            Payments are processed by our Merchant of Record, Creem (Creem Inc.). We never see or
             store your card number.
           </p>
         </section>
@@ -40,9 +40,14 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-base font-bold text-foreground">Who processes your data</h2>
           <p className="mt-2">
-            To clone a voice and generate speech, your sample and text are sent to a
-            third-party TTS provider (currently ElevenLabs). This is required for the service to
-            work. Storage is on [Cloudflare R2 / 选定区域]. We do not sell your data to anyone.
+            To clone a voice and generate speech, your sample and text are sent to our text-to-speech
+            provider, ElevenLabs (ElevenLabs Inc., United States). This is required for the service
+            to work. Account records — email address, hashed login codes, consent logs and character
+            balances — are stored in Supabase (Supabase Inc.). Audio files are stored in Cloudflare R2
+            (Cloudflare, Inc., United States) in a bucket with automatic placement: we do not pin a
+            fixed storage region, and Cloudflare writes each object to its nearest available location.
+            Transactional email (login codes and receipts) is delivered through Resend (Resend, Inc.).
+            We do not sell your data to anyone.
           </p>
         </section>
 
@@ -62,8 +67,9 @@ export default function PrivacyPage() {
           <h2 className="text-base font-bold text-foreground">Cookies</h2>
           <p className="mt-2">
             We set one cookie to remember your free-tier usage and, if you sign in, your
-            session. Analytics run on [Umami / GA4 — 上线前定], which uses a single first-party
-            cookie. No advertising cookies, no cross-site trackers.
+            session. Page views are measured with Vercel Web Analytics (Vercel Inc., United
+            States), which sets no cookies and does not track you across sites. No advertising
+            cookies, no cross-site trackers.
           </p>
         </section>
 

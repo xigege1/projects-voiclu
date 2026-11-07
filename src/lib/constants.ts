@@ -35,8 +35,13 @@ export const PAGES_ADDED = "2026-11-06";
  */
 export const GOVERNING_LAW = process.env.NEXT_PUBLIC_GOVERNING_LAW || "Singapore";
 
-/** 法务页显示用（sitemap 用的 CONTENT_UPDATED 是机器口径，这个是给人看的） */
-export const LEGAL_UPDATED = "November 5, 2026";
+/**
+ * 法务页显示用（sitemap 用的 CONTENT_UPDATED 是机器口径，这个是给人看的）
+ *
+ * 2026-11-08 更新：Creem 商户审核要求 — /privacy 补真实处理方与存储区域，
+ * /terms 增加 3.1 NSFW 内容禁令。改条款必须同步这个日期。
+ */
+export const LEGAL_UPDATED = "November 8, 2026";
 
 /**
  * TTS 能力与对外文案的一致性（2026-11-07 核对 ElevenLabs 官方 models 文档）

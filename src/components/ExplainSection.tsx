@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { LANG_COUNT_LABEL } from "@/lib/constants";
 
 /**
@@ -79,13 +78,6 @@ export default function ExplainSection() {
                 </tbody>
               </table>
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              See the full breakdown on{" "}
-              <Link href="/alternatives" className="font-medium text-primary underline">
-                the alternatives page
-              </Link>
-              .
-            </p>
           </div>
         </div>
       </div>

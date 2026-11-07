@@ -46,6 +46,35 @@ export default function TermsPage() {
             <a href="/voice-removal" className="text-[var(--brand)] underline">removal page</a>{" "}
             are suspended while we review and removed if the uploader cannot show consent.
           </p>
+
+          <h3 className="mt-6 text-sm font-bold text-foreground">
+            3.1 Sexually explicit and other NSFW content — prohibited
+          </h3>
+          <p className="mt-2">
+            Voiclu is not an adult-content product. Sexually explicit and other NSFW audio is
+            prohibited outright, whether generated from a cloned voice or a stock voice:
+          </p>
+          <ul className="mt-2 list-disc space-y-1 pl-5">
+            <li>Erotic audio, sexual role-play, and sexual moaning or breathing produced from any voice</li>
+            <li>Any sexual content featuring a real person&apos;s voice, even with their consent</li>
+            <li>
+              Any sexual content involving a minor — a zero-tolerance category. Such content is
+              removed immediately, the account is terminated, and the matter is reported to the
+              relevant authorities
+            </li>
+            <li>
+              Graphic violence, content that sexualizes a real person, or audio intended to degrade
+              someone on the basis of who they are
+            </li>
+          </ul>
+          <p className="mt-2">
+            We do not run automated classification on every generation, so enforcement is
+            report-driven and account-level: we review reported accounts within one business day,
+            remove the content, terminate the account, and do not refund any remaining allowance.
+            Report prohibited content to{" "}
+            <a className="text-[var(--brand)] underline" href={`mailto:${SITE.supportEmail}`}>{SITE.supportEmail}</a>{" "}
+            and include the share link of the audio.
+          </p>
         </section>
 
         <section>
