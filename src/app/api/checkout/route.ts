@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     planId,
     userId: identity.userId,
     email,
-    successUrl: `${SITE.url}/?paid=1`,
+    successUrl: `${SITE.url}/success`,
   });
 
   if (!result.ok) {

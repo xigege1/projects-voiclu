@@ -31,9 +31,8 @@ export default function RefundPage() {
         <section>
           <h2 className="text-base font-bold text-foreground">How the money comes back</h2>
           <p>
-            Refunds are issued to the original payment method. Our Merchant of Record
-            (Creem / Paddle) processes them and it typically takes 5–10 business days to appear
-            on your statement.
+            Refunds are issued to the original payment method. Creem, our merchant of record,
+            processes them and it typically takes 5–10 business days to appear on your statement.
           </p>
         </section>
 
