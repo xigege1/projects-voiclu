@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SITE, LEGAL_UPDATED } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Privacy Policy — Voiclu",
   description: "What Voiclu collects, why, and how to have it deleted.",
 };

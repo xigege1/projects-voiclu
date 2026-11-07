@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SITE } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/refund" },
   title: "Refund Policy — Voiclu",
   description: "30-day money-back guarantee. How it works, and the two exceptions.",
 };

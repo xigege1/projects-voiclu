@@ -11,7 +11,7 @@
 import { NextResponse } from "next/server";
 import { resolveIdentity } from "@/lib/identity";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { synthesize } from "@/lib/elevenlabs";
+import { synthesize, maxCharsPerRequest } from "@/lib/elevenlabs";
 import { putAudio, audioKey } from "@/lib/storage";
 import {
   cacheKey,
@@ -36,8 +36,12 @@ export async function POST(req: Request) {
     if (!body.voiceId || !text) {
       return NextResponse.json({ error: "voiceId_and_text_required" }, { status: 400 });
     }
-    if (text.length > 10000) {
-      return NextResponse.json({ error: "text_too_long", message: "Max 10,000 characters per generation." }, { status: 400 });
+    const maxChars = maxCharsPerRequest();
+    if (text.length > maxChars) {
+      return NextResponse.json(
+        { error: "text_too_long", message: `Max ${maxChars.toLocaleString("en-US")} characters per generation.` },
+        { status: 400 }
+      );
     }
 
     const db = getSupabaseAdmin();

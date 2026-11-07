@@ -5,6 +5,7 @@ import DemoSection from "@/components/DemoSection";
 import { LANG_COUNT_LABEL } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/text-to-speech" },
   title: "AI Voice Clone Text to Speech — Type Text, Hear Your Own Voice",
   description:
     "Turn any text into audio in your own cloned voice. Paste a script, pick a language, download the file. Works for articles, videos, podcasts and course narration.",

@@ -5,6 +5,7 @@ import FaqJsonLd from "@/components/FaqJsonLd";
 import { FREE_CHARS, LANG_COUNT_LABEL } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/free" },
   title: "Free AI Voice Cloning Online — No Sign-up, No Watermark",
   description:
     "Try AI voice cloning free. Upload 30 seconds of audio, hear your own voice speak a new language, download the result. No credit card.",

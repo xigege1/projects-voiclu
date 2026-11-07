@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SITE } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/voice-removal" },
   title: "Request removal of a cloned voice — Voiclu",
   description: "If someone cloned your voice on Voiclu without permission, request removal here. No account needed.",
 };

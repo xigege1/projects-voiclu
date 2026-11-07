@@ -3,6 +3,7 @@ import PricingSection from "@/components/PricingSection";
 import { FAQ_HOME } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/pricing" },
   title: "Pricing — Voiclu AI Voice Cloning Plans from $9.9/month",
   description:
     "Simple flat pricing: Starter $9.9/mo (~20 min), Creator $29/mo (~80 min), or a $49 one-time pack. Commercial license included, 30-day money-back guarantee.",

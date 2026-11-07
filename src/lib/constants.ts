@@ -2,8 +2,8 @@
  * 全局常量 —— 价格、额度、语言数
  * 依据方案：字符计费（1 字符 = 1 credit，1000 字符 ≈ 1 分钟音频）
  * 换算：20 分钟 = 20,000 字符 / 80 分钟 = 80,000 字符 / 40 分钟 = 40,000 字符
- * 注意：LANG_COUNT 按你最终使用的 TTS 供应商实际支持语言数修改，
- * 页面文案里的 "75+" 必须与产品真实能力一致，不要虚假宣传。
+ * 注意：LANG_COUNT 必须 ≤ 当前 TTS 模型真实支持的语言数，
+ * 页面文案里的 "75+" 不得超出产品真实能力（见下方 TTS 配置说明）。
  */
 export const SITE = {
   name: "Voiclu",
@@ -19,6 +19,12 @@ export const SITE = {
 export const CONTENT_UPDATED = "2026-11-05";
 
 /**
+ * 2026-11-06 新增 /about、/contact，并把 /terms、/privacy 的占位符清干净。
+ * sitemap 按页面分别记 lastmod，新增页用这个日期，不再全站共用 CONTENT_UPDATED。
+ */
+export const PAGES_ADDED = "2026-11-06";
+
+/**
  * 条款适用法域 + 政策更新时间。
  *
  * GOVERNING_LAW 默认 Singapore（SaaS 出海最常见的注册地，Creem / Paddle 都支持）。
@@ -32,6 +38,20 @@ export const GOVERNING_LAW = process.env.NEXT_PUBLIC_GOVERNING_LAW || "Singapore
 /** 法务页显示用（sitemap 用的 CONTENT_UPDATED 是机器口径，这个是给人看的） */
 export const LEGAL_UPDATED = "November 5, 2026";
 
+/**
+ * TTS 能力与对外文案的一致性（2026-11-07 核对 ElevenLabs 官方 models 文档）
+ *
+ * 旧配置 eleven_multilingual_v2 只有 29 种语言，全站却写 "75+" —— 名不副实。
+ * 现改用 eleven_v4：官方标称 90+ languages、单次上限 10,000 字符，
+ * 与 /api/tts 的 10,000 校验一致。于是 "75+" 变成保守的下限表述，
+ * 不需要改动任何页面文案。模型可在服务端用 ELEVENLABS_MODEL_ID 覆盖。
+ *
+ * 换模型时必需同步确认：新模型语言数 ≥ LANG_COUNT，否则下调文案。
+ */
+export const TTS_MODEL_LANGS = 90;
+export const TTS_MODEL_MAX_CHARS = 10_000;
+
+/** 对外文案用保守值：真实能力 90+，写 75+ 不会失真 */
 export const LANG_COUNT = 75;
 export const LANG_COUNT_LABEL = "75+";
 

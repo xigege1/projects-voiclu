@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SITE } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact Voiclu — Support, billing, takedown",
   description:
     "Reach the Voiclu team for support, billing questions, voice takedown requests or abuse reports. Replies within one business day.",

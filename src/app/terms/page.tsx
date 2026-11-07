@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SITE, LEGAL_UPDATED, GOVERNING_LAW } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/terms" },
   title: "Terms of Service — Voiclu",
   description: "Terms of service for Voiclu AI voice cloning and text to speech.",
 };

@@ -1,6 +1,6 @@
 # Voiclu 项目文档
 
-> 业务需求、执行方案与当前进展。最后更新：2026-11-05
+> 业务需求、执行方案与当前进展。最后更新：2026-11-07
 
 | 项 | 值 |
 |---|---|
@@ -179,15 +179,24 @@ cacheKey = sha256(provider_voice_id | lang | text)
 
 > 一屏一个焦点：首屏=上传框，试听区=播放按钮，定价页=Creator 卡。
 
-### 3.6 SEO
+### 3.6 SEO（2026-11-07 复核）
 
-- `sitemap.xml`：**13 条**（2026-11-06 从 6 条补齐）。核心页 `/`、`/pricing`、`/free`（1 / 0.9）；内容页 `/alternatives`、`/best`、`/text-to-speech`（0.8）；语言副本 `/br`（0.7）；公司页 `/about`、`/contact`（0.5）；法务页 `/privacy`、`/terms`、`/refund`、`/voice-removal`（0.3）
+- `sitemap.xml`：**11 条**（6 条 → 13 条 → 移出 2 条 noindex 页）。核心页 `/`、`/pricing`、`/free`（1 / 0.9）；内容页 `/text-to-speech`（0.8）；语言副本 `/br`（0.7）；公司页 `/about`、`/contact`（0.5）；法务页 `/privacy`、`/terms`、`/refund`、`/voice-removal`（0.3）。`/best`、`/alternatives` 因 `[实测填写]` 占位符加了 noindex 并移出 sitemap，填完再加回
 - `robots.txt`：允许全站，屏蔽 `/api/`，带 `Sitemap:` 行
-- 每页独立 Title / Description / H1，H1 只出现一次
+- 每页独立 Title / Description / **canonical**（2026-11-07 补齐 9 个缺失页，此前只有 `/` 和 `/br` 有）；首页另有 en / pt-BR / x-default 三处 hreflang
 - 首页 8 条 + `/free` 4 条 **FAQPage JSON-LD**
-- canonical 统一指向 `https://voiclu.com`；`www` 308 跳转到主域
-- `lastmod` 用固定日期（`CONTENT_UPDATED`），不用 `new Date()`——否则每次请求都是「现在」，Google 会判定 lastmod 不可靠
-- **标题层级必须 H1 → H2 → H3 不跳级**：现在首页 H1 之后直接是 3 个 H3（Upload / Pick a language / Download），缺 H2 承接，待修
+- `www` 308 跳转到主域
+- `lastmod` **按页面分别记录**（`CONTENT_UPDATED` = 11-05 用于核心页，`PAGES_ADDED` = 11-06 用于当天新建/改动的 7 个页），不用 `new Date()`。此前 11 条 URL 全用 11-05，导致 GSC 一直显示「上次读取 11/5、已发现 6 个网页」的旧快照
+- **标题层级必须 H1 → H2 → H3 不跳级**：现在首页 H1 之后直接是 3 个 H3（Upload / Pick a language / Download），缺 H2 承接，待修（线上实测已有 1 个 H1 / 7 个 H2 / 9 个 H3，需再确认语义层级）
+
+### 3.7 Bing / IndexNow（2026-11-07 新增）
+
+- `public/1007d7cf922e9a848e7c2a877e26f699.txt`：IndexNow 所有权校验文件，内容为 key 本身，随部署公开
+- `scripts/indexnow.mjs`：读线上 sitemap → 批量 POST 到 `https://api.indexnow.org/indexnow`（协议共享端点）+ `https://www.bing.com/indexnow`（Bing 直投，确保 BWT 的 IndexNow Insights 能记录）
+- `npm run indexnow` / `npm run indexnow:dry` / `npm run indexnow -- --url <单条>`
+- 2026-11-07 首次推送 11 条 URL，两端点均 **HTTP 202**（已接收、key 校验中）。**key 文件当时尚未部署，部署后必须重跑一次**才能完成校验
+- Bing 站点接入走 **Import from Google Search Console** 一键导入（GSC 网域资源已验证），无需另放 `BingSiteAuth.xml`
+- Google 未加入 IndexNow，sitemap 仍是 Google 侧唯一通道
 
 ---
 
@@ -231,6 +240,8 @@ cacheKey = sha256(provider_voice_id | lang | text)
 | 22:33 | `www` 配 308 跳转到主域 |
 | 22:40 | GSC 网域资源验证通过，提交 sitemap |
 | 22:50 | 修复 sitemap 的 `lastmod` 每次请求都变的问题 |
+| 11-06 01:05 | P0 落地：sitemap 6→13 条、补 `/about` `/contact`、付费扣减修复 |
+| 11-07 | GSC 效果报告 7 天 0/0 诊断（结论：报告窗口截止 11/4，早于上线日，非配置错误）；sitemap lastmod 按页拆分、补 9 页 canonical；接入 IndexNow 并首次推送；TTS 模型升级 `eleven_v4` |
 
 ### 5.2 已完成
 
@@ -302,7 +313,8 @@ cacheKey = sha256(provider_voice_id | lang | text)
 | 3 | Cloudflare R2：建 bucket + 公开域名 + API Token（6 个变量） | 音频存不下来 | 建议绑 `cdn.voiclu.com` |
 | 4 | Creem 注册 + 建 4 个产品 + webhook 密钥 | 收不了钱 | webhook 指向 `https://voiclu.com/api/webhooks/creem`；要真买一单验证 |
 | 5 | 填 `.env.local` → `bash scripts/push-env.sh` → 重新部署 | 11 个必需变量仍是空的 | `NEXT_PUBLIC_*` 不重新部署不生效 |
-| 6 | GSC 等 sitemap 转「成功」 | 目前状态「无法抓取」 | 域名太新，Google 会自动重试，24~48h 正常 |
+| 6 | ✅ GSC sitemap 已转「成功」 | — | 2026-11-05 提交，现已成功处理；**新增待办**：GSC 上次读取仍是 11/5 的 6 条旧快照，删掉旧记录重新提交，再用网址检查逐个请求编入索引 |
+| 10 | Bing Webmaster Tools 接入 | 覆盖 Bing / Yahoo / DuckDuckGo / Copilot 引用 | 走 GSC 一键导入；IndexNow 脚本与 key 文件已就绪，**部署后必须重跑一次** `npm run indexnow` |
 | 7 | 生成 6 条 demo 音频放 `public/demo/` | demo 区播放器为空 | 命名见 README |
 | 8 | 填 `/best`、`/alternatives` 的 `[实测填写]` | 这两页能排名的唯一理由 | 9~11 个工具各注册试用一遍，约 2~3 天 |
 | 9 | 3 条短视频 + Product Hunt / Reddit 发布 | 冷启动 | 脚本和文案见原方案 |
@@ -440,27 +452,83 @@ MoR 指以自己的名义卖、并承担代缴税义务的一方。Stripe 是收
 
 两份报告的 P0 会撞车：A 的"确认收款主体"（P0-B）同时决定 B 的"改收款文案"（P0-B3）。**主体不定，B3 就无法完成。** 其余 P0（B1/B2/B4/B5/B6）不依赖主体，可以立刻做。
 
+### 5.8 音频接口选型评估（2026-11-07）
+
+**背景**：评估 ElevenLabs / fal.ai / Replicate 或其他更优工具是否满足产品需求。以下价格与能力按 2026-10 至 11 月初各家官网与第三方核查口径整理，签约前需当日复核。
+
+**结论先行**：继续用 **ElevenLabs 直连**，但把模型从 `eleven_multilingual_v2` 升级到 `eleven_v4`。fal 和 Replicate **不是同一类厂商**，不能当作「语音克隆 API」的平替；真正值得进备选池的是 Fish Audio / MiniMax / Cartesia 这类一手语音厂商。
+
+#### 三类厂商的性质差异
+
+- **ElevenLabs**：自研模型 + 自有 API，一手供应商，商用许可由它一次性给足。
+- **fal.ai**：精选约 1,400 个模型的推理平台，按产出计费（ElevenLabs v3 在其上 $0.10/千字符，与官网基本持平），授权**逐模型**给。
+- **Replicate**：社区模型注册表 + 容器调度，主要按 GPU 秒计费（T4 $0.81/h ~ H100 $5.49/h），官方模型按产出计费，授权明文「穿透」给上游模型方。
+
+#### 对照产品硬需求
+
+| 维度 | 产品要求 | ElevenLabs | fal.ai | Replicate |
+|---|---|---|---|---|
+| 持久 `voice_id` | 克隆一次反复合成，`voices` 表只存 id | ✅ `/voices/add` 返回长期有效 id | ❌ 转售 ElevenLabs 时仍要官方 id；其余模型每次带参考音频 | ❌ 同理；MiniMax 克隆音色未使用约一周后删除 |
+| 多语言 | 页面承诺 75+ | ✅ v4 90+ / v3 70+；**旧配置 v2 仅 29，与文案矛盾** | 按模型 29~90+ | 按模型 30~100+ |
+| 计费可预测 | 按字符，成本 ≤ 售价 40% | ✅ 1 字符 = 1 credit，$0.05~0.10/千字符 | ⚠️ 按产出，无折价 | ❌ GPU 秒 + 社区模型冷启动 30~120s |
+| 商用授权 | 收款审核要看 | ✅ Starter $6/月起平台级商用许可 | ⚠️ 每模型自带许可，需逐个核 "Commercial use" | ⚠️ 条款写 "subject to any Third Party Terms"，上游条款常缺环 |
+| 同意验证 | §2.4 合规红线 | ✅ PVC 强制身份验证，IVC 需勾选授权 | ❌ 平台不管 | ❌ 平台不管；MiniMax 无同意验证机制 |
+
+**成本复核**：Creator $29 / 80,000 字符 = $0.36/千字符售价。按 ElevenLabs $0.10/千字符，成本占比约 **28%**，仍在「≤40%」硬规则内；切 Flash v2.5（32 语言、$0.05/千字符）可降到约 14%，但会牺牲语言覆盖。**成本不是当前瓶颈，语言覆盖与合规才是。**
+
+#### 为什么不建议换 fal / Replicate
+
+1. 它们是推理市场，不是语音 SaaS：`voice_id` 持久化、同意验证、AI 生成标记、商用许可都要自己补，等于把 §2.4 的合规红线重做一遍。
+2. 走 fal 调 ElevenLabs 并没有更便宜（$0.10/千字符 ≈ 官网价），却多一层供应商与条款穿透风险。
+3. Replicate 的 GPU 秒计费 + 冷启动，与「离线批量 + sha256 缓存」链路不匹配；社区模型输出权利链条经常缺环，生产级商用前必须逐模型存档许可页。
+
+#### 值得进备选池的一手厂商
+
+| 厂商 | 单价（2026-11 牌价） | 语言 | 克隆 | 定位 |
+|---|---|---|---|---|
+| Fish Audio S2.1 | ~$15/百万字符 | 50~83 | 10 秒，Apache-2.0 权重可自托管 | 成本兜底 / 未来自建 |
+| MiniMax Speech 2.8 | Turbo $60 / HD $100 每百万字符 | 40~50+ | $1.50/音色，10 秒 | 中文与多语种备用通道 |
+| Cartesia Sonic 3 | ~$0.03/分钟 | 40+ | 10 秒极速克隆（Pro 克隆需 Startup $49） | 实时场景，本项目用不上 |
+| ElevenLabs Flash v2.5 | ~$0.05/千字符 | 32 | IVC | 免费试听的便宜引擎 |
+
+> 维持 §5.6 的判断：**免费试听换便宜引擎暂缓**。免费额度是每身份 1 次 ≤150 字符 ≈ $0.03，省下的钱不足以覆盖多接一家 provider 的复杂度与音色割裂。等免费流量真起来，优先在 ElevenLabs 内部切 Flash v2.5，而不是引入第二家。
+
+#### 本次落地
+
+- `src/lib/elevenlabs.ts`：默认模型 `eleven_v4`（官方 90+ 语言、单次 10,000 字符，与 `/api/tts` 上限一致）；`voice_settings` 只对 v2 / flash 系列发送（v3 / v4 语义不同，照搬会 400）；新增 `maxCharsPerRequest()` 按模型查表，可用 `ELEVENLABS_MODEL_ID` 覆盖。
+- `src/app/api/tts/route.ts`：长度校验由硬编码 10,000 改为 `maxCharsPerRequest()`。
+- `src/lib/constants.ts`：补 `TTS_MODEL_LANGS` / `TTS_MODEL_MAX_CHARS` 与一致性注释；全站 "75+" 文案因此从虚假变成保守下限，**无需改动任何页面**。
+- ⚠️ 若回滚到 `eleven_multilingual_v2`（29 语言），必须同步把全站 "75+" 下调，否则重新变成虚假宣传。
+
+#### 新增风险
+
+产品 FAQ 写「每个文件都在元数据里标记 AI 生成」，`synthesize()` 目前只返回裸 MP3，没有写入 ID3 / C2PA 标记；EU AI Act 第 50 条对存量生成系统的机器可读标记期限是 **2026-12-02**。见 §7 风险 11。
+
 ---
 
 ## 6. 上线检查清单
 
 - [x] `https://voiclu.com/robots.txt` 没有 `Disallow: /`，有 `Sitemap:` 行
-- [x] `/sitemap.xml` 能打开，6 条真实 URL，`Content-Type: application/xml`
-- [x] 每页 Title / Description 不为空
+- [x] `/sitemap.xml` 能打开，**11 条**真实 URL，`Content-Type: application/xml`；每页 lastmod 按真实改动日分别记录
+- [x] 每页 Title / Description / **canonical** 不为空（2026-11-07 补齐 9 页）
 - [x] 地址栏有锁（HTTPS），证书有效期至 2027-02-03
 - [x] 首页移动端正常，工具卡可点
 - [x] GSC 网域资源验证通过
-- [x] GSC 提交 sitemap
-- [ ] GSC sitemap 状态转为「成功」（待 Google 重试）
+- [x] GSC 提交 sitemap，状态「成功」
+- [ ] GSC 删掉旧 sitemap 记录重新提交（上次读取 11/5 的 6 条旧版）+ 核心页逐个请求编入索引
 - [ ] Google 搜 `site:voiclu.com` 能看到页面
+- [ ] Bing Webmaster Tools 走 GSC 一键导入，确认 sitemap 已导入
+- [ ] 部署后重跑 `npm run indexnow`（首次提交时 key 文件未上线，返回 202 待校验）
+- [ ] `https://voiclu.com/1007d7cf922e9a848e7c2a877e26f699.txt` 线上可访问且内容匹配
 - [ ] API 真实链路跑通（等环境变量）
 - [ ] Creem 真买一单额度到账
 - [x] 全站搜 `[` 无占位符残留（`/terms`、`/privacy` 各一处）—— 2026-11-06 已验证
-- [x] `/sitemap.xml` ≥12 条 —— 现 13 条
+- [x] `/sitemap.xml` 11 条（含 `/br`；`/best`、`/alternatives` 因 `[实测填写]` 占位符 noindex 移出）
 - [x] 五个合规页 + `/about` + `/contact` 全部 200 —— 13 个页面全 200
 - [ ] 首页正文 ≥800 词，标题层级 H1→H2→H3 不跳级
 - [ ] demo 区 6 组音频可点播（无 404）
 - [ ] 付费扣减真机验证：手动把 users.plan 改 creator + credits_left 设值，连生成两次，确认第二次不 402 且额度递减
+- [ ] 生成音频写入机器可读 AI 标记（ID3 `TXXX` 或 C2PA）—— FAQ 已宣称但代码未实现，EU AI Act 第 50 条期限 2026-12-02
 
 ---
 
@@ -476,6 +544,8 @@ MoR 指以自己的名义卖、并承担代缴税义务的一方。Stripe 是收
 8. **定价可能卖亏**。$9.9 / 20,000 字符，若用户跑满且模型是 `eleven_multilingual_v2`（1 字符 = 1 credit），单用户月消耗约 20,000 credits。上线前必须做毛利测算（含超额策略），不能拍脑袋定价。
 9. **demo 区是空的，这是当前最大的转化损失**。`DemoSection` 有 6 个播放器，但 `public/demo/` 目录不存在，点播全是 404。对"克隆声音"这种必须听效果的品类，等于让人盲买。
 10. **收款文案写错会变成合规问题**。`/refund` 现在写"我们的 MoR（Creem / Paddle）"——如果最终用 Stripe 收单，这句就是假的（Stripe 不是 MoR，你自己才是卖家，税自己担）。先定渠道再写文案，顺序不能反。
+11. **AI 生成标记「说了但没做」**。FAQ 第 6 条写 "Every file is marked as AI-generated in its metadata"，`synthesize()` 却只返回裸 MP3，没有写入任何 ID3 / C2PA 标记。EU AI Act 第 50 条对存量生成系统的机器可读标记期限是 **2026-12-02**，美国 NO FAKES Act 也在推进。落地方式：在写入 R2 前给 MP3 加 ID3 `TXXX` 字段或接 C2PA，不要只靠页脚文字。
+12. **模型能力与文案可能再次漂移**。新增/更换 TTS 模型时，`LANG_COUNT`（75）必须 ≤ 模型真实语言数。当前 `eleven_v4` 是 90+，所以 "75+" 成立；一旦回滚到 `eleven_multilingual_v2`（29 语言）就必须同步改文案，否则重新变成虚假宣传。
 
 ---
 
@@ -494,4 +564,6 @@ MoR 指以自己的名义卖、并承担代缴税义务的一方。Stripe 是收
 | `src/lib/elevenlabs.ts` | IVC + TTS 封装 |
 | `src/lib/emails.ts` | 5 封邮件模板（Resend） |
 | `src/lib/wav.ts` | 浏览器端 webm → 16-bit PCM WAV 转码 |
+| `scripts/indexnow.mjs` | 读 sitemap 批量推给 IndexNow / Bing，支持 `--dry-run` 与单条 URL |
+| `public/1007d7cf922e9a848e7c2a877e26f699.txt` | IndexNow 所有权校验文件，内容为 key 本身 |
 | `README.md` | 部署清单与操作步骤 |

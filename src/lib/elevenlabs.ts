@@ -9,6 +9,41 @@
 const API = "https://api.elevenlabs.io/v1";
 
 /**
+ * 2026-11-07 修：旧代码写死 eleven_multilingual_v2，官方只支持 29 种语言，
+ * 但全站文案是 "75+" —— 产品能力与宣传不符。
+ * 换成 eleven_v4（官方 90+ languages、单次 10,000 字符，与 /api/tts 上限一致），
+ * 于是 "75+" 成为保守下限表述，页面文案无需改动。
+ *
+ * 用 ELEVENLABS_MODEL_ID 可覆盖；回滚时设回 eleven_multilingual_v2，
+ * 但那样必须同步把全站 "75+" 文案下调到 29。
+ */
+const MODEL_ID = process.env.ELEVENLABS_MODEL_ID || "eleven_v4";
+
+/** 各模型单次请求字符上限（ElevenLabs 官方 models 文档，2026-11 核对） */
+const MODEL_MAX_CHARS: Record<string, number> = {
+  eleven_v4: 10_000,
+  eleven_v4_turbo: 10_000,
+  eleven_v3: 5_000,
+  eleven_v3_conversational: 5_000,
+  eleven_multilingual_v2: 10_000,
+  eleven_flash_v2_5: 40_000,
+};
+
+/** /api/tts 用它做长度校验，换模型后不会把超长文本发给供应商再吃 400 */
+export function maxCharsPerRequest(): number {
+  return MODEL_MAX_CHARS[MODEL_ID] ?? 10_000;
+}
+
+/**
+ * v3 / v4 系列的 voice_settings 语义与 v2 不同，参数不能直接照搬。
+ * 保守起见只在 v2 / flash 系列发送 stability / similarity_boost，
+ * 避免升级模型后 TTS 接口直接返回 400。
+ */
+function usesLegacyVoiceSettings(modelId: string): boolean {
+  return modelId.startsWith("eleven_multilingual_v2") || modelId.startsWith("eleven_flash");
+}
+
+/**
  * 【演示 / 验证模式】
  * ElevenLabs 的 Instant Voice Cloning 需要 Starter（$6/月）及以上，
  * 免费额度（10k credits/月）只能做 TTS，调 /voices/add 会直接 401。
@@ -84,10 +119,15 @@ export async function deleteVoice(voiceId: string): Promise<void> {
 }
 
 /**
- * Text to Speech。模型用 multilingual v2（语言自动检测，无需传 lang 参数）；
+ * Text to Speech。模型走 MODEL_ID（语言自动检测，无需传 lang 参数）；
  * 缓存键仍带 lang（方案定的口径），未来换按语言路由的模型时不破缓存。
  */
 export async function synthesize(voiceId: string, text: string): Promise<Buffer> {
+  const body: Record<string, unknown> = { text, model_id: MODEL_ID };
+  if (usesLegacyVoiceSettings(MODEL_ID)) {
+    body.voice_settings = { stability: 0.5, similarity_boost: 0.75 };
+  }
+
   const res = await fetch(`${API}/text-to-speech/${voiceId}`, {
     method: "POST",
     headers: {
@@ -95,11 +135,7 @@ export async function synthesize(voiceId: string, text: string): Promise<Buffer>
       "Content-Type": "application/json",
       Accept: "audio/mpeg",
     },
-    body: JSON.stringify({
-      text,
-      model_id: "eleven_multilingual_v2",
-      voice_settings: { stability: 0.5, similarity_boost: 0.75 },
-    }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     const text2 = await res.text().catch(() => "");

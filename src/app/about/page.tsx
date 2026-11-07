@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SITE, LANG_COUNT_LABEL } from "@/lib/constants";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About Voiclu — Who builds it and why",
   description:
     "Voiclu is a small, independent voice cloning tool. Here is who runs it, what it does with your audio, and how to reach us.",
