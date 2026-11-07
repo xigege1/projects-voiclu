@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import HashAuth from "@/components/HashAuth";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -40,6 +41,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <HashAuth />
         <main className="flex-1">{children}</main>
         <Footer />
+        {/*
+          Vercel Web Analytics：只在 Vercel 部署环境注入 /_vercel/insights/script.js，
+          本地 dev / 自托管不会发出请求，也不影响 LCP（defer 加载）。
+          Hobby 计划含 50,000 events/月，超出只暂停收集、不扣费。
+          与下面的 Umami 二选一即可：Umami 变量为空时不会加载，两套并存会双计事件。
+        */}
+        <Analytics />
       </body>
     </html>
   );
