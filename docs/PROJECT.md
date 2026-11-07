@@ -525,7 +525,7 @@ MoR 指以自己的名义卖、并承担代缴税义务的一方。Stripe 是收
 - [x] 全站搜 `[` 无占位符残留（`/terms`、`/privacy` 各一处）—— 2026-11-06 已验证
 - [x] `/sitemap.xml` 11 条（含 `/br`；`/best`、`/alternatives` 因 `[实测填写]` 占位符 noindex 移出）
 - [x] 五个合规页 + `/about` + `/contact` 全部 200 —— 13 个页面全 200
-- [ ] 首页正文 ≥800 词，标题层级 H1→H2→H3 不跳级
+- [x] 首页正文 ≥800 词 —— 2026-11-07 去标签实测 **901 词**（含 nav/footer）；H2 八处已齐（How it works / What people build with it / Hear the same voice in 6 languages / Not just a new language / What is AI voice cloning? / Voiclu vs ElevenLabs / Simple pricing / FAQ），H1→H2→H3 不再跳级。**P1-2/P1-3/P1-4 视为已完成**
 - [ ] demo 区 6 组音频可点播（无 404）
 - [ ] 付费扣减真机验证：手动把 users.plan 改 creator + credits_left 设值，连生成两次，确认第二次不 402 且额度递减
 - [ ] 生成音频写入机器可读 AI 标记（ID3 `TXXX` 或 C2PA）—— FAQ 已宣称但代码未实现，EU AI Act 第 50 条期限 2026-12-02
